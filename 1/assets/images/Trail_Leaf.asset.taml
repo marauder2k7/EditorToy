@@ -1,0 +1,4 @@
+<ImageAsset
+    AssetName="Trail_Leaf"
+    ImageFile="@assetFile=Trail_Leaf.png"
+    FilterMode="NEAREST" />

@@ -1,0 +1,4 @@
+<ImageAsset
+    AssetName="brick_02"
+    ImageFile="@assetFile=brick_02.png"
+    FilterMode="NEAREST" />

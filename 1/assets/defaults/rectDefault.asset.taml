@@ -1,0 +1,4 @@
+<ImageAsset
+    AssetName="rectDefault"
+    ImageFile="@assetFile=rectDefault.png"
+    FilterMode="NEAREST" />

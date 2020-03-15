@@ -1,0 +1,8 @@
+<ImageAsset
+    AssetName="grassForeground"
+    ImageFile="@assetFile=grassForeground.png"
+    FilterMode="NEAREST"
+    CellCountX="21"
+    CellCountY="1"
+    CellWidth="100"
+    CellHeight="53" />

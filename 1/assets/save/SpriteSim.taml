@@ -1,0 +1,8 @@
+<SimSet
+    Name="SpriteSim">
+    <Sprite
+        Size="10 10"
+        BodyType="Static"
+        Image="@asset=EditorToy:Asteroids"
+        Frame="0" />
+</SimSet>

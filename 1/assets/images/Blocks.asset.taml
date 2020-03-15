@@ -1,0 +1,8 @@
+<ImageAsset
+    AssetName="Blocks"
+    ImageFile="@assetFile=Blocks.png"
+    FilterMode="NEAREST"
+    CellCountX="8"
+    CellCountY="7"
+    CellWidth="64"
+    CellHeight="64" />

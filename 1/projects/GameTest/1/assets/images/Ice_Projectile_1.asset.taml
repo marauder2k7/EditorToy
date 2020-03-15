@@ -1,0 +1,9 @@
+<ImageAsset
+	AssetName="Ice_Projectile_1"
+	ImageFile="Ice_Projectile_1.png"
+	FilterMode="Nearest"
+	CellCountX="4"
+	CellCountY="4"
+	CellWidth="64"
+	CellHeight="64"
+/>
