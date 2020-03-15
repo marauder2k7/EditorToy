@@ -1,7 +1,0 @@
-<AnimationAsset
-	AssetName="Blocks_Animation"
-	Image="@asset=GameTest:Blocks"
-	AnimationFrames="0 1 2 3 4 5 6 7 8 9"
-	AnimationTime="1"
-	AnimationCycle="1"
-/>
