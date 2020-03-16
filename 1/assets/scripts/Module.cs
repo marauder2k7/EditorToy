@@ -181,5 +181,24 @@ function EditorToy::loadModule(%this)
 	EditorToy.moduleName = %moduleName;
 	AssetDatabase.addModuleDeclaredAssets(%moduleDef);
 	ModuleLoad.setVisible(0);
+	%this.loadModulePref();
 	EditorToy.activateSceneBttn();
+}
+
+function EditorToy::saveModule(%this)
+{
+	%mName = EditorToy.moduleName;
+	$pref::Module::Scene = EditorToy.sceneName;
+	export("$pref::Module::*","^EditorToy/projects/"@ %mName @ "/1/" @ %mName @ ".prefs.cs");
+}
+
+function EditorToy::loadModulePref(%this)
+{
+	%mName = EditorToy.moduleName;
+	exec("^EditorToy/projects/"@ %mName @ "/1/" @ %mName @ ".prefs.cs");
+	%autoScene = $pref::Module::Scene;
+	if(%autoScene !$= "")
+	{
+		EditorToy.autoLoadScene(%autoScene);
+	}
 }

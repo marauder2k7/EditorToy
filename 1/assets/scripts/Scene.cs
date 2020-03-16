@@ -5,7 +5,6 @@
 
 function EditorToy::resetSceneDefault(%this)
 {
-	%this.sceneName = "";
 	SceneName.setText("");
 }
 
@@ -29,12 +28,6 @@ function EditorToy::updateSceneName(%this, %value)
 //-------------------------------------------------------------------------
 //Scene creation gui
 function SceneName::onAdd(%this)
-{
-	%text = EditorToy.sceneName;
-	%this.setText(%text);
-}
-
-function SceneName::update(%this)
 {
 	%text = EditorToy.sceneName;
 	%this.setText(%text);
@@ -140,6 +133,7 @@ function EditorToy::loadScene(%this)
 			%scene.delete();
 		}
 		%this.loadScene = TamlRead("^EditorToy/projects/"@ %mName @ "/1/assets/scenes/"@ %sceneBase @ ".scene.taml");
+		EditorToy.sceneName = %sceneBase;
 		SandboxWindow.setScene(%this.loadScene);
 		EditorToy.activeScene = %this.loadScene;
 		%this.loadScene.setDebugOn("collision");
@@ -165,8 +159,10 @@ function EditorToy::autoLoadScene(%this, %sceneBase)
 	}
 	%this.loadScene = TamlRead("^EditorToy/projects/"@ %mName @ "/1/assets/scenes/"@ %sceneBase @ ".scene.taml");
 	SandboxWindow.setScene(%this.loadScene);
+	EditorToy.sceneName = %sceneBase;
 	EditorToy.activeScene = %this.loadScene;
 	%this.loadScene.setDebugOn("collision");
+	%this.loadScenePref();
 	EditorToy.activateToolbarBttn();
 }
 

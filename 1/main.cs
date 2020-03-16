@@ -41,7 +41,6 @@ function EditorToy::create(%this)
 	};
 	
 	CSEditImageDisplay.add(%csEditImage);
-	
 	//Load editor functions for module and scene
 	exec("./assets/scripts/Module.cs");
 	exec("./assets/scripts/Scene.cs");
@@ -66,17 +65,19 @@ function EditorToy::create(%this)
 	 ImagePreviewWindow.setScene(ImagePreviewScene);
 	 EditorToy.add(ImagePreviewWindow);
 	
-	// Set it to the scene.
+	//Set it to the scene.
     PolyEditorWindow.setScene( SandboxScene );
 	EditorToy.add(PolyEditorWindow);
 	
 	//Editor user view
 	EditorToy.aspectRatio = 0.0; 
 	EditorToy.mouseMode = "default";
+	EditorToy.oldPosition = "";
+	EditorToy.newPosition = "";
 	EditorToy.compEditMode = "select";
 	EditorToy.compSpriteSelSprite = "";
 	
-	//Edtiro Movement Def.
+	//Editor Movement Def.
 	EditorToy.cameraSpeed = 1;
 	EditorToy.objectSpeed = 1;
 	
@@ -94,6 +95,7 @@ function EditorToy::create(%this)
 	EditorToy.sceneVelIter = 8;
 	EditorToy.sceneName = "";
 	EditorToy.activeScene = null;
+	EditorToy.sceneState = "pause";
 	
 	//Set Polylist variables
 	EditorToy.selObject = null;
@@ -526,42 +528,19 @@ function EditorToy::create(%this)
 	%this.createRectLayoutMenu();
 	//%this.createSimSets();
 	// Reset the toy.
+	//Remove default input listener
+	SandboxWindow.removeInputListener( Sandbox.InputController ); 
 	
     %this.reset();
 }
 
-/*function EditorToy::Init_controls(%this)
+function EditorToy::Init_controls(%this)
 {
 	new ActionMap(EditorControls);
 	
-	EditorControls.bindCmd(keyboard, "a", "EditorToy.moveCamera( -EditorToy.cameraSpeed , 0 );", "EditorToy.stopCamera();");
-	EditorControls.bindCmd(keyboard, "d", "EditorToy.moveCamera( EditorToy.cameraSpeed , 0 );", "EditorToy.stopCamera();");
-	EditorControls.bindCmd(keyboard, "w", "EditorToy.moveCamera( 0 , EditorToy.cameraSpeed );", "EditorToy.stopCamera();");
-	EditorControls.bindCmd(keyboard, "s", "EditorToy.moveCamera( 0 , -EditorToy.cameraSpeed );", "EditorToy.stopCamera();");
-	EditorControls.bindCmd(keyboard, "shift a", "EditorToy.moveCamera( -EditorToy.cameraSpeed * 2 , 0 );", "EditorToy.stopCamera();");
-	EditorControls.bindCmd(keyboard, "shift d", "EditorToy.moveCamera( EditorToy.cameraSpeed * 2 , 0 );", "EditorToy.stopCamera();");
-	EditorControls.bindCmd(keyboard, "shift w", "EditorToy.moveCamera( 0 , EditorToy.cameraSpeed * 2 );", "EditorToy.stopCamera();");
-	EditorControls.bindCmd(keyboard, "shift s", "EditorToy.moveCamera( 0 , -EditorToy.cameraSpeed * 2 );", "EditorToy.stopCamera();");
-	EditorControls.bindCmd(keyboard, "ctrl a", "EditorToy.moveCamera( -EditorToy.cameraSpeed / 2 , 0 );", "EditorToy.stopCamera();");
-	EditorControls.bindCmd(keyboard, "ctrl d", "EditorToy.moveCamera( EditorToy.cameraSpeed / 2 , 0 );", "EditorToy.stopCamera();");
-	EditorControls.bindCmd(keyboard, "ctrl w", "EditorToy.moveCamera( 0 , EditorToy.cameraSpeed / 2 );", "EditorToy.stopCamera();");
-	EditorControls.bindCmd(keyboard, "ctrl s", "EditorToy.moveCamera( 0 , -EditorToy.cameraSpeed / 2 );", "EditorToy.stopCamera();");
-	EditorControls.bindCmd(keyboard, "left", "EditorToy.moveObject( -EditorToy.objectSpeed , 0 );" , "EditorToy.createObjectMenu(EditorToy.selObject);");
-	EditorControls.bindCmd(keyboard, "right", "EditorToy.moveObject( EditorToy.objectSpeed , 0 );" , "EditorToy.createObjectMenu(EditorToy.selObject);");
-	EditorControls.bindCmd(keyboard, "up", "EditorToy.moveObject( 0 , EditorToy.objectSpeed );" , "EditorToy.createObjectMenu(EditorToy.selObject);");
-	EditorControls.bindCmd(keyboard, "down", "EditorToy.moveObject( 0 , -EditorToy.objectSpeed );" , "EditorToy.createObjectMenu(EditorToy.selObject);");
-	EditorControls.bindCmd(keyboard, "shift left", "EditorToy.moveObject( -EditorToy.objectSpeed * 2, 0 );" , "EditorToy.createObjectMenu(EditorToy.selObject);");
-	EditorControls.bindCmd(keyboard, "shift right", "EditorToy.moveObject( EditorToy.objectSpeed * 2, 0 );" , "EditorToy.createObjectMenu(EditorToy.selObject);");
-	EditorControls.bindCmd(keyboard, "shift up", "EditorToy.moveObject( 0 , EditorToy.objectSpeed * 2);" , "EditorToy.createObjectMenu(EditorToy.selObject);");
-	EditorControls.bindCmd(keyboard, "shift down", "EditorToy.moveObject( 0 , -EditorToy.objectSpeed * 2);" , "EditorToy.createObjectMenu(EditorToy.selObject);");
-	EditorControls.bindCmd(keyboard, "ctrl left", "EditorToy.moveObject( -EditorToy.objectSpeed / 2, 0 );" , "EditorToy.createObjectMenu(EditorToy.selObject);");
-	EditorControls.bindCmd(keyboard, "ctrl right", "EditorToy.moveObject( EditorToy.objectSpeed / 2, 0 );" , "EditorToy.createObjectMenu(EditorToy.selObject);");
-	EditorControls.bindCmd(keyboard, "ctrl up", "EditorToy.moveObject( 0 , EditorToy.objectSpeed / 2);" , "EditorToy.createObjectMenu(EditorToy.selObject);");
-	EditorControls.bindCmd(keyboard, "ctrl down", "EditorToy.moveObject( 0 , -EditorToy.objectSpeed / 2);" , "EditorToy.createObjectMenu(EditorToy.selObject);");
-	EditorControls.bindCmd(keyboard, "delete", "EditorToy.deleteObject();" , "echo(object deleted)");
-	
-	EditorControls.push();
-}*/
+	EditorControls.bindObj(keyboard, "delete", deleteObject, EditorToy);
+
+}
 
 function scanForModules()
 {
@@ -608,7 +587,13 @@ function EditorToy::destroy(%this)
 	{
 		EditorToy.saveScene();
 	}
+	%mName = EditorToy.moduleName;
+	if(%mName !$= "")
+	{
+		EditorToy.saveModule();
+	}
 	EditorControls.pop();
+	EditorControls.delete();
 	//Remove our gui menus
 	SandboxWindow.remove(ImageAssetMenu);
     // Deactivate the package.
@@ -628,6 +613,10 @@ function EditorToy::reset(%this)
     SandboxWindow.setCameraPosition( 0 , 0 );
     SandboxWindow.setCameraAngle( 0 );
     SandboxWindow.setCameraSize( %extent.x , %extent.y );
+	
+	%this.Init_controls();
+	
+	EditorControls.push();
 	
 	/*Setting custom cursor
 	Should probably be done in guiprofiles
@@ -1046,6 +1035,36 @@ function EditorToy::onTouchUp(%this, %touchID, %worldPosition)
 	
 }
 
+function EditorToy::onMiddleMouseDown(%this, %touchID, %worldPosition)
+{
+	%windowPosition = SandboxWindow.getWindowPoint(%worldPosition);
+	EditorToy.oldPosition = %windowPosition;	
+	EditorToy.newPosition = %windowPosition;
+}
+
+function EditorToy::onMiddleMouseDragged(%this, %touchID, %worldPosition)
+{
+	echo(%touchId @ " touch dragged " @ %worldPosition);
+	
+	%windowPosition = SandboxWindow.getWindowPoint(%worldPosition);
+	
+	EditorToy.oldPosition = EditorToy.newPosition;
+	echo("old position" @ EditorToy.oldPosition);
+	
+	EditorToy.newPosition = %windowPosition;
+	
+	echo("new position" @ EditorToy.newPosition);
+	
+	%panOffset = Vector2Sub( EditorToy.newPosition , EditorToy.oldPosition);
+	
+	%panOffset = Vector2InverseY( %panOffset );
+	
+	%panOffset = Vector2Mult(%panOffset, SandboxWindow.getCameraWorldScale());
+	
+	SandboxWindow.setCameraPosition(Vector2Sub(SandboxWindow.getCameraPosition(), %panOffset));
+	
+}
+
 //Create Editor window
 function EditorToy::createEditorMenu(%this)
 {	
@@ -1125,7 +1144,6 @@ function EditorToy::createCompSpriteSpriteMenu(%this)
 	CSSAlphaTest.update();
 	CSSBlendA.update();
 }
-
 
 function EditorToy::createObjectMenu(%this, %obj)
 {
@@ -2268,3 +2286,4 @@ function EditorToy::deleteObject(%this)
 	%this.hideAssetMenus();
 	EditorToy.selObject.delete();
 }
+
