@@ -985,18 +985,18 @@ function EditorToy::updateCompSpriteCollGui(%this)
 	if(%colNum > 0)
 	{
 		%mainContainer = new GuiControl(CompSpriteMainCollContainer){
-		position = "0 0";
-		extent = "197 0";
-		isContainer = "1";
+			position = "0 0";
+			extent = "197 0";
+			isContainer = "1";
 		};
 		
 		%mainStack = new GuiStackControl(){
-		position = "0 0";
-		extent = "197 0";
-		stackingType = "Vertical";
-		horizStacking = "Left to Right";
-		vertStacking = "Top to Bottom";
-		padding = "3";
+			position = "0 0";
+			extent = "197 0";
+			stackingType = "Vertical";
+			horizStacking = "Left to Right";
+			vertStacking = "Top to Bottom";
+			padding = "3";
 		};
 		
 		%mainContainer.add(%mainStack);
@@ -5273,6 +5273,7 @@ function EditorToy::exitEditMode(%this)
 	EditorToy.mouseMode = "default";
 	if(EditorToy.compEditMode !$= "select")
 	{
+		EditorToy.compEditMode = "select";
 		Canvas.resetCursor();
 	}
 	if(RectToolsDisplay.isVisible())
@@ -5400,11 +5401,7 @@ function EditorToy::csEraserMode(%this)
 
 function EditorToy::csSelectorMode(%this)
 {
-	if(EditorToy.compEditMode $= "select")
-	{
-		return;
-	}
-	else	
+	if(EditorToy.compEditMode !$= "select")
 	{
 		EditorToy.compEditMode = "select";
 		Canvas.resetCursor();

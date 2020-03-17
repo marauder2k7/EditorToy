@@ -170,15 +170,15 @@ if (!isObject(GuiEditorTextEditNumProfile)) new GuiControlProfile(GuiEditorTextE
 
 if(!isObject(PaintCursor)) new GuiCursor(PaintCursor)
 {
-	hotspost = "0 0";
-	renderOffset = "0.5 0.5";
+	hotspost = "1 1";
+	renderOffset = "0.0 0.0";
 	bitmapName = "^EditorToy/assets/gui/images/PaintMouse";
 };
 
 if(!isObject(EraserCursor)) new GuiCursor(EraserCursor)
 {
-	hotspost = "0 0";
-	renderOffset = "0.5 0.5";
+	hotspost = "1 1";
+	renderOffset = "0.0 0.0";
 	bitmapName = "^EditorToy/assets/gui/images/EraserMouse";
 };
 

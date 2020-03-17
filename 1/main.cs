@@ -538,8 +538,7 @@ function EditorToy::Init_controls(%this)
 {
 	new ActionMap(EditorControls);
 	
-	EditorControls.bindObj(keyboard, "delete", deleteObject, EditorToy);
-
+	EditorControls.bindCmd(keyboard, "delete", "EditorToy.deleteObject();", "");
 }
 
 function scanForModules()
@@ -774,14 +773,6 @@ function PolyEditorWindow::onTouchDown(%this, %touchID, %worldPosition)
 	
 	// Pick an object.
     %picked = %scene.pickPoint( %worldPosition );
-	if(%picked $= "")
-	{
-		if(%drawMode == true)
-		{
-			EditorToy.createPolylistItem(%worldPosition);
-			EditorToy.createLine();
-		}
-	}
 	%pickCount = %picked.Count;
 	//loop through each object and check for a "PolyHandle"
 	//so we don't draw 100 polyhandles in the same place
@@ -1063,6 +1054,25 @@ function EditorToy::onMiddleMouseDragged(%this, %touchID, %worldPosition)
 	
 	SandboxWindow.setCameraPosition(Vector2Sub(SandboxWindow.getCameraPosition(), %panOffset));
 	
+}
+
+function EditorToy::onMouseWheelUp(%this)
+{
+	SandboxWindow.setCameraZoom( SandboxWindow.getCameraZoom() + 0.1);
+}
+
+function EditorToy::onMouseWheelDown(%this)
+{
+	%zoom = SandboxWindow.getCameraZoom();
+	
+	if(%zoom > 0.1)
+	{
+		SandboxWindow.setCameraZoom( SandboxWindow.getCameraZoom() - 0.1);
+	}
+	else
+	{
+		SandboxWindow.setCameraZoom(0.1);
+	}
 }
 
 //Create Editor window
@@ -2000,7 +2010,7 @@ function EditorToy::createLine(%this)
 {
 	%pL = EditorToy.polyListPosLocal;
 	%scene = %this.activeScene;
-	
+	%pCount = PolylistSim.getCount();
 	//Sanity
 	if(isObject(LineOverlay))
 	{
@@ -2008,7 +2018,7 @@ function EditorToy::createLine(%this)
 		%pL = "";
 	}
 	%sObj = EditorToy.selObject;
-	for(%i = 0; %i < PolylistSim.getCount(); %i++)
+	for(%i = 0; %i < %pCount; %i++)
 	{
 		%object = PolylistSim.getObject(%i);
 		%pPos = %object.getPosition();
@@ -2018,13 +2028,14 @@ function EditorToy::createLine(%this)
 		%pL = %pL SPC %lPos;
 	}
 	%cPos = %sObj.getPosition();
-	%pCount = PolylistSim.getCount();
+	%ang = %sObj.getAngle();
 	//only draw when we have more than 1 point
 	if(%pCount > 1)
 	{
 		%obj = new ShapeVector( LineOverlay );
 		%obj.PolyList = %pL;
 		%obj.Position = %cPos;
+		%obj.Angle = %ang;
 		%obj.LineColor = "0.0 0.0 1.0 1.0";
 		// Add to the scene.
 		%scene.add( %obj );
@@ -2287,3 +2298,23 @@ function EditorToy::deleteObject(%this)
 	EditorToy.selObject.delete();
 }
 
+function LockState::onClick(%this)
+{
+	%obj = EditorToy.selObject;
+	%className = %obj.getClassName();
+	echo("button Clicked");
+	if(%this.getStateOn())
+	{
+		if(%className $= "Sprite")
+		{
+			SpriteScroll.setVisible(0);
+		}
+	}
+	else
+	{
+		if(%className $= "Sprite")
+		{
+			SpriteScroll.setVisible(1);
+		}
+	}
+}

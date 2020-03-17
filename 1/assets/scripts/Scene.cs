@@ -179,3 +179,29 @@ function EditorToy::loadScenePref(%this)
 	EditorToy.sceneVelIter = $pref::Scene::VelocityIterations;
 	EditorToy.setSceneWindowCamera();
 }
+
+function EditorToy::playScene(%this)
+{
+	%scene = %this.activeScene;
+	%count = %scene.getCount();
+	%list = %scene.getSceneObjectList();
+	for(%i = 0; %i < %count; %i++)
+	{
+		%obj = getWord(%list, %i);
+		%class = %obj.getClassName();
+		%obj.setActive(1);
+	}
+}
+
+function EditorToy::pauseScene(%this)
+{
+	%scene = %this.activeScene;
+	%count = %scene.getCount();
+	%list = %scene.getSceneObjectList();
+	for(%i = 0; %i < %count; %i++)
+	{
+		%obj = getWord(%list, %i);
+		%class = %obj.getClassName();
+		%obj.setActive(0);
+	}
+}

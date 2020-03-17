@@ -1020,27 +1020,27 @@ function EditorToy::updateScrollerCollGui(%this)
 	%colNum = EditorToy.scrollerCollShapeCount;
 	ScrollerCollisionShapeContainer.setExtent(197,150);
 	
-	%mainContainer = new GuiControl(ScrollerMainCollContainer){
-		position = "0 0";
-		extent = "197 0";
-		isContainer = "1";
-	};
-	
-	%mainStack = new GuiStackControl(){
-		position = "0 0";
-		extent = "197 0";
-		stackingType = "Vertical";
-        horizStacking = "Left to Right";
-        vertStacking = "Top to Bottom";
-		padding = "3";
-	};
-	
-	%mainContainer.add(%mainStack);
-	
 	if(%colNum == 0)
 		return;
 	if(%colNum > 0)
-	{	
+	{
+		%mainContainer = new GuiControl(ScrollerMainCollContainer){
+			position = "0 0";
+			extent = "197 0";
+			isContainer = "1";
+		};
+	
+		%mainStack = new GuiStackControl(){
+			position = "0 0";
+			extent = "197 0";
+			stackingType = "Vertical";
+			horizStacking = "Left to Right";
+			vertStacking = "Top to Bottom";
+			padding = "3";
+		};
+	
+		%mainContainer.add(%mainStack);
+	
 		for(%i = 0; %i < %colNum; %i++)
 		{
 			%colType = %obj.getCollisionShapeType(%i);
