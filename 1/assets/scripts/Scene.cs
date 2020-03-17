@@ -96,6 +96,8 @@ function EditorToy::saveScene(%this)
 	$pref::Scene::GravityY = EditorToy.sceneGravityY;
 	$pref::Scene::PositionIterations = EditorToy.scenePosIter;
 	$pref::Scene::VelocityIterations = EditorToy.sceneVelIter;
+	$pref::Scene::ObjectSizeX = EditorToy.sceneObjectX;
+	$pref::Scene::ObjectSizeY = EDitorToy.sceneObjectY;
 	export("$pref::Scene::*","^EditorToy/projects/"@ %mName @ "/1/assets/scenes/" @ %sceneName @ ".prefs.cs");
 	%this.loadScenePref();
 }
@@ -177,7 +179,12 @@ function EditorToy::loadScenePref(%this)
 	EditorToy.sceneGravityY = $pref::Scene::GravityY;
 	EditorToy.scenePosIter = $pref::Scene::PositionIterations;
 	EditorToy.sceneVelIter = $pref::Scene::VelocityIterations;
+	EditorToy.sceneObjectX = $pref::Scene::ObjectSizeX;
+	EditorToy.sceneObjectY = $pref::Scene::ObjectSizeY;
+	
 	EditorToy.setSceneWindowCamera();
+	
+	%this.updateSceneEdit();
 }
 
 function EditorToy::playScene(%this)
@@ -204,4 +211,140 @@ function EditorToy::pauseScene(%this)
 		%class = %obj.getClassName();
 		%obj.setActive(0);
 	}
+}
+
+function SceneGravX::update(%this)
+{
+	%value = EditorToy.sceneGravityX;
+	%this.setText(%value);
+}
+
+function SceneGravY::update(%this)
+{
+	%value = EditorToy.sceneGravityY;
+	%this.setText(%value);
+}
+
+function VelIter::update(%this)
+{
+	%value = EditorToy.sceneVelIter;
+	%this.setText(%value);
+}
+
+function PosIter::update(%this)
+{
+	%value = EditorToy.scenePosIter;
+	%this.setText(%value);
+}
+
+function ObjectSizeX::update(%this)
+{
+	%value = EditorToy.sceneObjectX;
+	%this.setText(%value);
+}
+
+function ObjectSizeY::update(%this)
+{
+	%value = EditorToy.sceneObjectY;
+	%this.setText(%value);
+}
+
+function SceneGravX::onReturn(%this)
+{
+	%value = %this.getText();
+	%this.updateSceneGravityX(%value);
+}
+
+function SceneGravY::onReturn(%this)
+{
+	%value = %this.getText();
+	%this.updateSceneGravityY(%value);
+}
+
+function VelIter::onReturn(%this)
+{
+	%value = %this.getText();
+	%this.updateSceneVelIter(%value);
+}
+
+function PosIter::onReturn(%this)
+{
+	%value = %this.getText();
+	%this.updateScenePosIter(%value);
+}
+
+function ObjectSizeX::onReturn(%this)
+{
+	%value = %this.getText();
+	%this.updateSceneObjectSizeX(%value);
+}
+
+function ObjectSizeY::onReturn(%this)
+{
+	%value = %this.getText();
+	%this.updateSceneObjectSizeY(%value);
+}
+
+function EditorToy::updateSceneGravityX(%this,%value)
+{
+	%this.sceneGravityX = %value;
+}
+
+function EditorToy::updateSceneGravityY(%this,%value)
+{
+	%this.sceneGravityY = %value;
+}
+
+function EditorToy::updateSceneVelIter(%this, %value)
+{
+	%this.sceneVelIter = %value;
+}
+
+function EditorToy::updateScenePosIter(%this, %value)
+{
+	%this.scenePosIter = %value;
+}
+
+function EditorToy::updateSceneObjectSizeX(%this, %value)
+{
+	%this.sceneObjectX = %value;
+}
+
+function EditorToy::updateSceneObjectSizeY(%this, %value)
+{
+	%this.sceneObjectY = %value;
+}
+
+function EditorToy::updateSceneValues(%this)
+{
+	%scene = EditorToy.activeScene;
+	%gravX = SceneGravX.getText();
+	%gravY = SceneGravY.getText();
+	%velIter = VelIter.getText();
+	%posIter = PosIter.getText();
+	%objX = ObjectSizeX.getText();
+	%objY = ObjectSizeY.getText();
+	
+	EditorToy.sceneGravityX = %gravX;
+	EditorToy.sceneGravityY = %gravY;
+	EditorToy.sceneVelIter = %velIter;
+	EditorToy.scenePosIter = %posIter;
+	EditorToy.sceneObjectX = %objX;
+	EditorToy.sceneObjectY = %objY;
+	
+	%scene.setGravity(%gravX, %gravY);
+	%scene.setVelocityIterations(%velIter);
+	%scene.setPositionIterations(%posIter);
+}
+
+function EditorToy::updateSceneEdit(%this)
+{
+	SceneGravX.update();
+	SceneGravY.update();
+	VelIter.update();
+	PosIter.update();
+	ObjectSizeX.update();
+	ObjectSizeY.update();
+	
+	%this.updateSceneValues();
 }

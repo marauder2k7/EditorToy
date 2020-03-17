@@ -106,6 +106,8 @@ function EditorToy::create(%this)
 	EditorToy.sceneName = "";
 	EditorToy.activeScene = null;
 	EditorToy.sceneState = "pause";
+	EditorToy.sceneObjectX = 1;
+	EditorToy.sceneObjectY = 1;
 	
 	//Set Polylist variables
 	EditorToy.selObject = null;

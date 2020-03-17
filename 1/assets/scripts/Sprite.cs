@@ -37,10 +37,11 @@ function EditorToy::createSprite(%this, %assetFile)
 	%scene = EditorToy.activeScene;
 	%pos = SandboxWindow.getCameraPosition();
 	%mName = EditorToy.moduleName;
+	%size = EditorToy.sceneObjectX SPC EditorToy.sceneObjectY;
 	%spriteBase = %assetFile;
 	// Create the sprite.
     %object = new Sprite();
-    %object.Size = "10 10";
+    %object.Size = %size;
 	%object.SetBodyType( static );
 	%object.Position = %pos;
     %object.Image = %mName @ ":" @%spriteBase;

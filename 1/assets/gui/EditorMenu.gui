@@ -9961,7 +9961,7 @@
                profile = "GuiDefaultProfile";
                visible = "1";
                active = "1";
-			   class = "LockState";
+               class = "LockState";
                tooltipProfile = "GuiToolTipProfile";
                hovertime = "1000";
                isContainer = "0";
@@ -16672,7 +16672,6 @@
          tooltipProfile = "GuiToolTipProfile";
          hovertime = "1000";
          isContainer = "1";
-         hidden = "1";
          canSave = "1";
          canSaveDynamicFields = "0";
 
@@ -16745,7 +16744,7 @@
             canSave = "1";
             canSaveDynamicFields = "0";
          };
-         new GuiTextEditCtrl() {
+         new GuiTextEditCtrl(SceneGravX) {
             historySize = "0";
             tabComplete = "0";
             sinkAllKeyEvents = "0";
@@ -16766,13 +16765,14 @@
             profile = "GuiEditorTextEditProfile2";
             visible = "1";
             active = "1";
+			command = "SceneGravX.onReturn();";
             tooltipProfile = "GuiToolTipProfile";
             hovertime = "1000";
             isContainer = "1";
             canSave = "1";
             canSaveDynamicFields = "0";
          };
-         new GuiTextEditCtrl() {
+         new GuiTextEditCtrl(SceneGravY) {
             historySize = "0";
             tabComplete = "0";
             sinkAllKeyEvents = "0";
@@ -16793,6 +16793,7 @@
             profile = "GuiEditorTextEditProfile2";
             visible = "1";
             active = "1";
+			command = "SceneGravY.onReturn();";
             tooltipProfile = "GuiToolTipProfile";
             hovertime = "1000";
             isContainer = "1";
@@ -16822,7 +16823,7 @@
             canSave = "1";
             canSaveDynamicFields = "0";
          };
-         new GuiTextEditCtrl() {
+         new GuiTextEditCtrl(VelIter) {
             historySize = "0";
             tabComplete = "0";
             sinkAllKeyEvents = "0";
@@ -16843,6 +16844,7 @@
             profile = "GuiEditorTextEditNumProfile";
             visible = "1";
             active = "1";
+			command = "VelIter.onReturn();";
             tooltipProfile = "GuiToolTipProfile";
             hovertime = "1000";
             isContainer = "1";
@@ -16872,7 +16874,7 @@
             canSave = "1";
             canSaveDynamicFields = "0";
          };
-         new GuiTextEditCtrl() {
+         new GuiTextEditCtrl(PosIter) {
             historySize = "0";
             tabComplete = "0";
             sinkAllKeyEvents = "0";
@@ -16893,6 +16895,7 @@
             profile = "GuiEditorTextEditNumProfile";
             visible = "1";
             active = "1";
+			command = "PosIter.onReturn();";
             tooltipProfile = "GuiToolTipProfile";
             hovertime = "1000";
             isContainer = "1";
@@ -16912,6 +16915,7 @@
             profile = "BlueButtonProfile";
             visible = "1";
             active = "1";
+			command = "SceneSettingsPopout.toggleVisible();";
             tooltipProfile = "GuiToolTipProfile";
             hovertime = "1000";
             isContainer = "0";
@@ -16931,13 +16935,14 @@
             profile = "BlueButtonProfile";
             visible = "1";
             active = "1";
+			command = "EditorToy.updateSceneValues();";
             tooltipProfile = "GuiToolTipProfile";
             hovertime = "1000";
             isContainer = "0";
             canSave = "1";
             canSaveDynamicFields = "0";
          };
-         new GuiTextEditCtrl(ObjectSizeY1) {
+         new GuiTextEditCtrl(ObjectSizeY) {
             historySize = "0";
             tabComplete = "1";
             sinkAllKeyEvents = "0";
@@ -16958,7 +16963,7 @@
             profile = "GuiEditorTextEditNumProfile";
             visible = "1";
             active = "1";
-            command = "ScrollerName.onReturn();";
+            command = "ObjectSizeY.onReturn();";
             tooltipProfile = "GuiToolTipProfile";
             hovertime = "1000";
             isContainer = "1";
@@ -16988,7 +16993,7 @@
             canSave = "1";
             canSaveDynamicFields = "0";
          };
-         new GuiTextEditCtrl(ObjectSizeX1) {
+         new GuiTextEditCtrl(ObjectSizeX) {
             historySize = "0";
             tabComplete = "1";
             sinkAllKeyEvents = "0";
@@ -17008,8 +17013,8 @@
             vertSizing = "bottom";
             profile = "GuiEditorTextEditNumProfile";
             visible = "1";
-            active = "0";
-            command = "ScrollerName.onReturn();";
+            active = "1";
+            command = "ObjectSizeX.onReturn();";
             tooltipProfile = "GuiToolTipProfile";
             hovertime = "1000";
             isContainer = "1";
