@@ -1,15 +1,19 @@
+function EditorToy::createAnimationAssetMenu(%this)
+{
+	exec("^EditorToy/assets/gui/AnimationBuilder.gui");
+	SandboxWindow.add(AnimationBuilder);
+}
+
 function EditorToy::createAnimationAsset(%this, %imgName)
 {
 	%mName = EditorToy.moduleName;
-	exec("^EditorToy/assets/gui/AnimationBuilder.gui");
-	SandboxWindow.add(AnimationBuilder);
 	AnimationBuilder.setVisible(1);
 	%anim  = new AnimationAsset();
 	%asset = %mName @ ":" @ %imgName;
 	//We have to do this to get the frame count
 	%image = AssetDatabase.acquireAsset(%asset);
 	%frameCount = %image.getFrameCount();
-	
+	ImageFrames.clear();
 	for(%i = 0; %i < %frameCount; %i++)
 	{
 		%imageCont = new GuiBitmapButtonCtrl()
@@ -151,38 +155,38 @@ function EditorToy::updateFrameStack(%this)
 			%object.delete();
 		}
 	}
-	
-	for(%i = 0; %i < FrameSim.getCount(); %i ++)
-	{
-		%fOb = FrameSim.getObject(%i);
-		%frameNum = %fOb.getName();
-		%imageCont = new GuiBitmapButtonCtrl()
+	for(%i = 0; %i < FrameSim.getCount(); %i++)
 		{
-			bitmap = "^EditorToy/assets/gui/images/OverlayBttn";
-			bitmapMode = "Stretched";
-			autoFitExtents = "0";
-			useModifiers = "0";
-			useStates = "1";
-			masked = "0";
-			groupNum = "-1";
-			command = "EditorToy.removeFrame(" @ %i @ ");";
-			buttonType = "PushButton";
-			useMouseEvents = "0";
-			extent = "64 64";
-		};
-		
-		%imageFrame = new GuiSpriteCtrl()
-		{
-			Image = %asset;
-			Active = "1";
-			Position = "0 0";
-			Extent = "64 64";
-			Frame = %frameNum;
-		};
-		%imageFrame.add(%imageCont);
-		FrameStack.add(%imageFrame);
-		FrameStackSim.add(%imageFrame);
-	}
+			%fOb = FrameSim.getObject(%i);
+			%frameNum = %fOb.getName();
+			%imageCont = new GuiBitmapButtonCtrl()
+			{
+				bitmap = "^EditorToy/assets/gui/images/OverlayBttn";
+				bitmapMode = "Stretched";
+				autoFitExtents = "0";
+				useModifiers = "0";
+				useStates = "1";
+				masked = "0";
+				groupNum = "-1";
+				command = "EditorToy.removeFrame(" @ %i @ ");";
+				buttonType = "PushButton";
+				useMouseEvents = "0";
+				extent = "64 64";
+			};
+			
+			%imageFrame = new GuiSpriteCtrl()
+			{
+				Image = %asset;
+				Active = "1";
+				Position = "0 0";
+				Extent = "64 64";
+				Frame = %frameNum;
+			};
+			%imageFrame.add(%imageCont);
+			FrameStack.add(%imageFrame);
+			FrameStackSim.add(%imageFrame);
+		}
+
 	%this.setAnimationFrames();
 }
 
@@ -207,6 +211,8 @@ function EditorToy::setAnimationFrames(%this)
 	}
 	
 	%this.updateAnimationFrame(%frames);
+	if(%frames $= "")
+		return;
 	%this.updatePreviewAnim();
 }
 
@@ -337,8 +343,8 @@ function EditorToy::addAnimationAsset(%this, %assetFile)
 
 function EditorToy::resetAnimationAssetDefaults(%this)
 {
-	SandboxWindow.remove(AnimationBuilder);
-	
+	//SandboxWindow.remove(AnimationBuilder);
+	AnimationBuilder.setVisible(0);
 	EditorToy.populateAssetSims();
 	//Clear FrameStackSim
 	if(isObject(FrameStackSim))
