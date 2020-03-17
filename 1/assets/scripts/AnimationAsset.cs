@@ -85,6 +85,7 @@ function EditorToy::loadAnimationAsset(%this)
 	//we only want to use assets imported into editor
 	%AnimAssetLoad.ChangePath = false;
 	
+	
 	if(%AnimAssetLoad.Execute())
 	{
 		Tools.FileDialogs.LastFilePath = "";
@@ -92,8 +93,10 @@ function EditorToy::loadAnimationAsset(%this)
 		%defaultBase = fileBase(%defaultFile);
 		//need to do it twice because assets are .asset.taml
 		//first fileBase takes it to .asset 
+		%num = AnimationSim.getCount();
+		echo(%num);
 		%imgName = fileBase(%defaultBase);
-		%animName = %imgName @ "_Animation";
+		%animName = "Animation_" @ %num;
 		%this.updateAnimationName(%animName);
 		%this.updateAnimationImage(%imgName);
 		%AnimAssetLoad.delete();
@@ -305,13 +308,13 @@ function EditorToy::exportAnimationTaml(%this)
 	
 	%defaultLocation = "^EditorToy/projects/"@ %mName @ "/1/assets/animations/";
 	%defaultTaml = "^EditorToy/assets/defaults/empty.taml";
-	%toTaml = %defaultLocation @ %name @ ".asset.taml";
+	%toTaml = %defaultLocation @ %img @ "_" @ %name @ ".asset.taml";
 	
 	//Write Taml File
 	%file = new FileObject();
-	%file.openForWrite( "^EditorToy/projects/"@ %mName @ "/1/assets/animations/" @ %name @ ".asset.taml" );
+	%file.openForWrite( "^EditorToy/projects/"@ %mName @ "/1/assets/animations/" @ %img @ "_"  @ %name @ ".asset.taml" );
 	%file.writeLine("<AnimationAsset");
-	%file.writeLine("	AssetName=\"" @ %name @ "\"");
+	%file.writeLine("	AssetName=\"" @ %img @ "_"  @ %name @ "\"");
 	%file.writeLine("	Image=\"@asset=" @ %mName @ ":" @ %img @ "\"");
 	%file.writeLine("	AnimationFrames=\"" @ %frames @ "\"");
 	%file.writeLine("	AnimationTime=\"" @ %time @ "\"");
@@ -336,6 +339,7 @@ function EditorToy::resetAnimationAssetDefaults(%this)
 {
 	SandboxWindow.remove(AnimationBuilder);
 	
+	EditorToy.populateAssetSims();
 	//Clear FrameStackSim
 	if(isObject(FrameStackSim))
 	{

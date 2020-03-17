@@ -30,7 +30,15 @@ function EditorToy::create(%this)
 	exec("./assets/gui/editorGuiProfiles.cs");
 	exec("./assets/gui/EditorMenu.gui");
 	SandboxWindow.add(LevelEditorGui);
+	//Custom GUI must be exec after defaults are set
+	exec("./assets/gui/CreateModule.gui");
+	exec("./assets/gui/SceneCreate.gui");
+	exec("./assets/gui/ImageAssetImport.gui");
+	exec("./assets/gui/PolyEditor.gui");
+	exec("./assets/gui/ModuleLoad.gui");
+	exec("./assets/gui/RectLayout.gui");
 	%this.deactivateToolbar();
+	ModuleLoadBttn.setActive(0);
 	scanForModules();
 	
 	%csEditImage = new GuiSpriteCtrl(CSEditImage)
@@ -82,9 +90,11 @@ function EditorToy::create(%this)
 	EditorToy.objectSpeed = 1;
 	
 	//Module Defaults
+	EditorToy.cmoduleName = "";
 	EditorToy.moduleName = "";
 	EditorToy.moduleDesc = "";
 	EditorToy.selectedModule = "";
+	EditorToy.activeModule = "";
 	
 	//SceneDefaults
 	EditorToy.sceneCameraX = 16;
@@ -309,7 +319,7 @@ function EditorToy::create(%this)
 	EditorToy.cssBlendMode = false;
 	EditorToy.cssSrcBlendFac = 0;
 	EditorToy.cssDstBlendFac = 0;
-	EditorToy.editImage = "";
+	EditorToy.editImage = "EditorToy:rectDefault";
 	EditorToy.editImageFrame = 0;
 	EditorToy.selectedCss = "";
 	
@@ -512,13 +522,7 @@ function EditorToy::create(%this)
 	%assetId = "ToyAssets:CrossHair1";
 	echo("Asset type = ", AssetDatabase.getAssetType(%assetId) );
 	*/
-	//Custom GUI must be exec after defaults are set
-	exec("./assets/gui/CreateModule.gui");
-	exec("./assets/gui/SceneCreate.gui");
-	exec("./assets/gui/ImageAssetImport.gui");
-	exec("./assets/gui/PolyEditor.gui");
-	exec("./assets/gui/ModuleLoad.gui");
-	exec("./assets/gui/RectLayout.gui");
+	
     //Create our menus here
 	%this.createModuleMenu();
 	%this.createSceneMenu();
@@ -544,8 +548,9 @@ function EditorToy::Init_controls(%this)
 function scanForModules()
 {
 	// Find the toy modules.
+	ModuleDatabase.scanModules("^EditorToy/projects/");
+	
     %editorModules = ModuleDatabase.findModuleTypes( "EditorModule", false );
-
     // Do we have an existing set of sandbox toys?
     if ( !isObject(EditorModules) )
     {
@@ -563,8 +568,12 @@ function scanForModules()
     {
         // Fetch module definition.
         %moduleDefinition = getWord( %editorModules, %i );
-        
         // Add to EditorModules sandbox toys.
+		%moduleTitle = %moduleDefinition.moduleId;
+		if(EditorToy.moduleName $= %moduleTitle)
+		{
+			EditorToy.activeModule = %moduleDefinition;
+		}
         EditorModules.add( %moduleDefinition );       
     }
 	
@@ -573,6 +582,7 @@ function scanForModules()
 	{
 		EditorToy.activateModuleLoadBttn();
 	}
+	ModuleList.update();
 }
 
 function EditorToy::destroy(%this)
@@ -702,6 +712,42 @@ function EditorToy::populateSim(%this)
 	}
 }
 */
+
+function EditorToy::createAssetSims(%this)
+{
+	if(!isObject (AnimationSim))
+	{
+		%animSim = new SimSet(AnimationSim);
+	}
+	
+	if(!isObject (ImageSim))
+	{
+		%imageSim = new SimSet(ImageSim);
+	}
+	
+	if(!isObject (ParticleSim))
+	{
+		%particleSim = new SimSet(ParticleSim);
+	}
+}
+
+function EditorToy::deleteAssetSims(%this)
+{
+	if(isObject (AnimationSim))
+	{
+		AnimationSim.delete();
+	}
+	
+	if(isObject (ImageSim))
+	{
+		ImageSim.delete();
+	}
+	
+	if(isObject (ParticleSim))
+	{
+		ParticleSim.delete();
+	}
+}
 //-----------------------------------------------------------------------------
 function EditorToy::createCursor(%this)
 {
@@ -1576,6 +1622,7 @@ function EditorToy::createObjectMenu(%this, %obj)
 function EditorToy::activateModuleLoadBttn(%this)
 {
 	ModuleLoadBttn.setActive(1);
+	
 }
 function EditorToy::activateSceneBttn(%this)
 {
@@ -1603,7 +1650,6 @@ function EditorToy::activateToolbarBttn(%this)
 
 function EditorToy::deactivateToolbar(%this)
 {
-	ModuleLoadBttn.setActive(0);
 	NewSceneBttn.setActive(0);
 	LoadSceneBttn.setActive(0);
 	SaveSceneBttn.setActive(0);
@@ -2086,8 +2132,11 @@ function EditorToy::createEdgeCollision(%this)
 	{
 		%objHeight = %objWidth * %aspect;
 	}
+	%scene = %this.activeScene;
+	PolyEditorWindow.setScene(%scene);
     PolyEditorWindow.setCameraSize( %objWidth , %objHeight );
 	PolyEditorWindow.setCameraPosition( %objPos.x , %objPos.y );
+	%obj.setPickingAllowed(false);
 	
 	PolyEditorMenu.setVisible(1);
 	PolyEditorMain.add( PolyEditorWindow );
@@ -2110,8 +2159,11 @@ function EditorToy::createChainCollision(%this)
 	{
 		%objHeight = %objWidth * %aspect;
 	}
+	%scene = %this.activeScene;
+	PolyEditorWindow.setScene(%scene);
     PolyEditorWindow.setCameraSize( %objWidth , %objHeight );
 	PolyEditorWindow.setCameraPosition( %objPos.x , %objPos.y );
+	%obj.setPickingAllowed(false);
 	
 	PolyEditorMenu.setVisible(1);
 	PolyEditorMain.add( PolyEditorWindow );

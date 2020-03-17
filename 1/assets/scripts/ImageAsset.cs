@@ -406,6 +406,7 @@ function EditorToy::addImageAsset(%this, %assetFile)
 	%moduleDef = ModuleDatabase.findModule( %mName , 1);
 	AssetDatabase.addDeclaredAsset(%moduleDef,%aFile);
 	%this.resetImageAssetDefaults();
+	EditorToy.populateAssetSims();
 }
 //-----------------------------------------------------------------------------
 //Updates for ImageAsset values

@@ -2712,8 +2712,16 @@ function ScrollerFrame::lowerAmount(%this)
 
 function ScrollerFrame::raiseAmount(%this)
 {
+	%scroll = EditorToy.selScroller;
+	%asset = %scroll.getImage();
+	%image = AssetDatabase.acquireAsset(%asset);
+	%frameCount = %image.getFrameCount();
+	//Sprite ImageFrame starts at 0
+	%frameCount = %frameCount - 1;
     %value = %this.getText();
 	%value++;
+	if(%value > %frameCount)
+		%value = %frameCount;
 	EditorToy.updateScrollerFrame(%value);
     %text = %value;
     %this.setText(%text);

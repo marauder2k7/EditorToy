@@ -5375,8 +5375,16 @@ function CSEditImageFrame::lowerAmount(%this)
 
 function CSEditImageFrame::raiseAmount(%this)
 {
+	
+	%asset = EditorToy.editImage;
+	%image = AssetDatabase.acquireAsset(%asset);
+	%frameCount = %image.getFrameCount();
+	//Sprite ImageFrame starts at 0
+	%frameCount = %frameCount - 1;
     %value = %this.getText();
-	%value = %value + 1.0;
+	%value++;
+	if(%value > %frameCount)
+		%value = %frameCount;
 	EditorToy.updateEditImageFrame(%value);
     %text = %value;
     %this.setText(%text);
@@ -5560,8 +5568,16 @@ function CSSFrame::lowerAmount(%this)
 
 function CSSFrame::raiseAmount(%this)
 {
+	%comp = EditorToy.selCompSprite;
+	%asset = %comp.getSpriteImage();
+	%image = AssetDatabase.acquireAsset(%asset);
+	%frameCount = %image.getFrameCount();
+	//Sprite ImageFrame starts at 0
+	%frameCount = %frameCount - 1;
     %value = %this.getText();
 	%value++;
+	if(%value > %frameCount)
+		%value = %frameCount;
 	EditorToy.updateCssFrame(%value);
     %text = %value;
     %this.setText(%text);

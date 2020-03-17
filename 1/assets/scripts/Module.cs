@@ -13,7 +13,7 @@ function EditorToy::createModule(%this)
 //Module Name
 function EditorToy::updateModuleName(%this, %value)
 {
-	%this.moduleName = %value;
+	%this.cmoduleName = %value;
 }
 
 function ModuleName::update(%this)
@@ -67,6 +67,23 @@ function EditorToy::finishModule(%this)
 	
 	EditorToy.updateModuleName(%mName);
 	EditorToy.updateModuleDesc(%mDesc);
+	%active = EditorToy.activeModule;
+	if(%active !$="")
+	{
+		EditorToy.saveModule();
+	}
+	
+	%activeScene = EditorToy.activeScene;
+	if(%activeScene != "")
+	{
+		EditorToy.saveScene();
+		%activeScene.clear();
+		%activeScene.delete();
+		
+		EditorToy.activateScene = null;
+		
+		SandboxWindow.setScene(SandboxScene);
+	}
 	
 	if(%mName $= "")
 		return;
@@ -81,13 +98,16 @@ function EditorToy::finishModule(%this)
 		createPath("^EditorToy/projects/"@ %mName @ "/1/assets/sounds/");
 		createPath("^EditorToy/projects/"@ %mName @ "/1/assets/animations/");
 	}
+	EditorToy.deleteAssetSims();
 	%this.copyModuleTaml();
 }
 
 function EditorToy::copyModuleTaml(%this)
 {
 	ModuleCreate.setVisible(0);
+	EditorToy.moduleName = EditorToy.cmoduleName;
 	%mName = EditorToy.moduleName;
+	
 	if(%mName $= "")
 		return;
 	%defaultLocation = "^EditorToy/projects/"@ %mName @ "/1/";
@@ -126,12 +146,17 @@ function EditorToy::writeModuleTaml(%this)
 	%file.writeLine("</ModuleDefinition>");
 	%file.close();
 	
-	%modulesFound = ModuleDatabase.scanModules("^EditorToy/projects/");
+	//%modulesFound = ModuleDatabase.scanModules("^EditorToy/projects/");
 	//Re scan for modules to build our list again for loading new
 	//modules that have just been created.
 	scanForModules();
+
 	EditorToy.hideObjMenus();
+	EditorToy.deactivateToolbar();
 	EditorToy.activateSceneBttn();
+	EditorToy.createAssetSims();
+	EditorToy.populateAssetSims();
+	
 }
 //-----------------------------------------------
 //MODULE LOAD
@@ -143,11 +168,14 @@ function EditorToy::createModuleLoadMenu(%this)
 
 function EditorToy::loadModuleMenu(%this)
 {
+	//
+	scanForModules();
 	ModuleLoad.setVisible(1);
 }
 
-function ModuleList::onAdd(%this)
+function ModuleList::update(%this)
 {
+	%this.clear();
 	%moduleCount = EditorModules.getCount();
 	for(%i = 0; %i < %moduleCount; %i++)
 	{
@@ -166,13 +194,13 @@ function EditorToy::updateSelectedModule(%this, %value)
 function ModuleList::onReturn(%this)
 {
 	%value = %this.getText();
-	echo(%value);
 	
 	EditorToy.updateSelectedModule(%value);
 }
 
 function EditorToy::loadModule(%this)
 {
+	EditorToy.deleteAssetSims();
 	SandboxScene.clear();
 	//%module = ModuleList.getText();
 	%module = EditorToy.selectedModule;
@@ -180,6 +208,7 @@ function EditorToy::loadModule(%this)
 	%moduleDef = getWord(%module, 1);
 	EditorToy.moduleName = %moduleName;
 	AssetDatabase.addModuleDeclaredAssets(%moduleDef);
+	EditorToy.activeModule = %moduleDef;
 	ModuleLoad.setVisible(0);
 	%this.loadModulePref();
 	EditorToy.activateSceneBttn();
@@ -200,5 +229,44 @@ function EditorToy::loadModulePref(%this)
 	if(%autoScene !$= "")
 	{
 		EditorToy.autoLoadScene(%autoScene);
+	}
+	
+	EditorToy.createAssetSims();
+	EditorToy.populateAssetSims();
+}
+
+function EditorToy::populateAssetSims(%this)
+{
+	%module = EditorToy.activeModule;
+	
+	ImageSim.clear();
+	AnimationSim.clear();
+	ParticleSim.clear();
+	
+	new AssetQuery(AssetList);
+	
+	%count = AssetDatabase.findAllAssets(AssetList);
+	
+	//we could be passing through a lot of items here
+	for(%i = 0; %i < %count; %i++)
+	{
+		echo(%i);
+		%asset = AssetList.getAsset(%i);
+		%asMod = AssetDatabase.getAssetModule(%asset);
+		if(%asMod $= %module)
+		{
+			%type = AssetDatabase.getAssetType(%asset);
+			if(%type $= "ImageAsset")
+			{
+				%simOb = new SimObject(%asset);
+				ImageSim.add(%simOb);
+			}
+			else if(%type $= "AnimationAsset")
+			{
+				%simOb = new SimObject(%asset);
+				AnimationSim.add(%simOb);
+			}
+		}
+		
 	}
 }

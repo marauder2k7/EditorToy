@@ -2557,8 +2557,15 @@ function SpriteFrame::lowerAmount(%this)
 
 function SpriteFrame::raiseAmount(%this)
 {
+	%asset = EditorToy.selSprite.getImage();
+	%image = AssetDatabase.acquireAsset(%asset);
+	%frameCount = %image.getFrameCount();
+	//Sprite ImageFrame starts at 0
+	%frameCount = %frameCount - 1;
     %value = %this.getText();
 	%value++;
+	if(%value > %frameCount)
+		%value = %frameCount;
 	EditorToy.updateSpriteFrame(%value);
     %text = %value;
     %this.setText(%text);
