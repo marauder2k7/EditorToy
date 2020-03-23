@@ -16233,8 +16233,6 @@ function PEmissionAngleValue0::onReturn(%this)
 {
 	%id = %this.EmitterId;
 	%value = %this.getText();
-	if(%value < 0)
-		%value = 0;
 	//Set first datakey to the value
 	if(isObject (EmissionAngleKey0 @ %id))
 	{
@@ -16248,8 +16246,6 @@ function PEmissionAngleValue0::onLoseFirstResponder(%this)
 {
 	%id = %this.EmitterId;
 	%value = %this.getText();
-	if(%value < 0)
-		%value = 0;
 	if(isObject (EmissionAngleKey0 @ %id))
 	{
 		%objId = EmissionAngleSim.findObjectByInternalName(EmissionAngleKey0 @ %id);
@@ -16331,8 +16327,6 @@ function PEmissionAngleValue1::onReturn(%this)
 {
 	%id = %this.EmitterId;
 	%value = %this.getText();
-	if(%value < 0)
-		%value = 0;
 	if(isObject (EmissionAngleKey1 @ %id))
 	{
 		%objId = EmissionAngleSim.findObjectByInternalName(EmissionAngleKey1 @ %id);
@@ -16345,8 +16339,6 @@ function PEmissionAngleValue1::onLoseFirstResponder(%this)
 {
 	%id = %this.EmitterId;
 	%value = %this.getText();
-	if(%value < 0)
-		%value = 0;
 	//Set first datakey to the value
 	if(isObject (EmissionAngleKey1 @ %id))
 	{
@@ -16445,8 +16437,6 @@ function PEmissionAngleValue2::onReturn(%this)
 {
 	%id = %this.EmitterId;
 	%value = %this.getText();
-	if(%value < 0)
-		%value = 0;
 	if(isObject (EmissionAngleKey2 @ %id))
 	{
 		%objId = EmissionAngleSim.findObjectByInternalName(EmissionAngleKey2 @ %id);
@@ -16459,8 +16449,6 @@ function PEmissionAngleValue2::onLoseFirstResponder(%this)
 {
 	%id = %this.EmitterId;
 	%value = %this.getText();
-	if(%value < 0)
-		%value = 0;
 	//Set first datakey to the value
 	if(isObject (EmissionAngleKey2 @ %id))
 	{
@@ -16559,8 +16547,6 @@ function PEmissionAngleValue3::onReturn(%this)
 {
 	%id = %this.EmitterId;
 	%value = %this.getText();
-	if(%value < 0)
-		%value = 0;
 	if(isObject (EmissionAngleKey3 @ %id))
 	{
 		%objId = EmissionAngleSim.findObjectByInternalName(EmissionAngleKey3 @ %id);
@@ -16573,8 +16559,6 @@ function PEmissionAngleValue3::onLoseFirstResponder(%this)
 {
 	%id = %this.EmitterId;
 	%value = %this.getText();
-	if(%value < 0)
-		%value = 0;
 	//Set first datakey to the value
 	if(isObject (EmissionAngleKey3 @ %id))
 	{

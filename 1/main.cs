@@ -26,6 +26,7 @@ function EditorToy::create(%this)
 	exec("./assets/scripts/Scroller.cs");
 	exec("./assets/scripts/CompSprite.cs");
 	exec("./assets/scripts/AnimationAsset.cs");
+	exec("./assets/scripts/ParticlePlayer.cs");
 	exec("./assets/scripts/ParticleAsset.cs");
 	exec("./assets/scripts/Emitter.cs");
 	//Load custom profiles
@@ -511,6 +512,115 @@ function EditorToy::create(%this)
 	EditorToy.scrollerCollGroup[29] = false;
 	EditorToy.scrollerCollGroup[30] = false;
 	EditorToy.scrollerCollGroup[31] = false;
+	
+	//SetParticlePlayerDefaults
+	EditorToy.selParticlePlayer = null;
+	EditorToy.particlePlayerName = "";
+	EditorToy.particlePlayerClass = "";
+	EditorToy.particlePlayerPosX = 0.0;
+	EditorToy.particlePlayerPosY = 0.0;
+	EditorToy.particlePlayerWidth = 0.0;
+	EditorToy.particlePlayerHeight = 0.0;
+	EditorToy.particlePlayerFlipX = false;
+	EditorToy.particlePlayerFlipY = false;
+	EditorToy.particlePlayerAngle = 0;
+	EditorToy.particlePlayerFixedAngle = false;
+	EditorToy.particlePlayerAngVel = 0;
+	EditorToy.particlePlayerAngDamp = 0;
+	EditorToy.particlePlayerLinVelX = 0;
+	EditorToy.particlePlayerLinVelY = 0;
+	EditorToy.particlePlayerLinVelPolAngle = 0;
+	EditorToy.particlePlayerLinVelPolSpeed = 0;
+	EditorToy.particlePlayerLinDamp = 0;
+	EditorToy.particlePlayerDefDensity = 0;
+	EditorToy.particlePlayerDefFriction = 0;
+	EditorToy.particlePlayerDefRestitution = 0;
+	EditorToy.particlePlayerCollOne = false;
+	EditorToy.particlePlayerCollSupp = false;
+	EditorToy.particlePlayerBody = 0;
+	EditorToy.particlePlayerCollShapeCount = 0;
+	EditorToy.particlePlayerFrame = 0;
+	EditorToy.particlePlayerGravity = 1.0;
+	EditorToy.particlePlayerSceneLayer = 0;
+	EditorToy.particlePlayerSceneGroup = 0;
+	EditorToy.particlePlayerCollLayers = "0";
+	EditorToy.particlePlayerCollGroups = "0";
+	EditorToy.particlePlayerAlphaTest = 0.0;
+	EditorToy.particlePlayerBlendMode = false;
+	EditorToy.particlePlayerSrcBlend = 0.0;
+	EditorToy.particlePlayerDestBlend = 0.0;
+	EditorToy.particlePlayerBlendR = 0.0;
+	EditorToy.particlePlayerBlendG = 0.0;
+	EditorToy.particlePlayerBlendB = 0.0;
+	EditorToy.particlePlayerBlendA = 0.0;
+	
+	//ParticlePlayer Collision Layers
+	EditorToy.particlePlayerCollLayer[0] = false;
+	EditorToy.particlePlayerCollLayer[1] = false;
+	EditorToy.particlePlayerCollLayer[2] = false;
+	EditorToy.particlePlayerCollLayer[3] = false;
+	EditorToy.particlePlayerCollLayer[4] = false;
+	EditorToy.particlePlayerCollLayer[5] = false;
+	EditorToy.particlePlayerCollLayer[6] = false;
+	EditorToy.particlePlayerCollLayer[7] = false;
+	EditorToy.particlePlayerCollLayer[8] = false;
+	EditorToy.particlePlayerCollLayer[9] = false;
+	EditorToy.particlePlayerCollLayer[10] = false;
+	EditorToy.particlePlayerCollLayer[11] = false;
+	EditorToy.particlePlayerCollLayer[12] = false;
+	EditorToy.particlePlayerCollLayer[13] = false;
+	EditorToy.particlePlayerCollLayer[14] = false;
+	EditorToy.particlePlayerCollLayer[15] = false;
+	EditorToy.particlePlayerCollLayer[16] = false;
+	EditorToy.particlePlayerCollLayer[17] = false;
+	EditorToy.particlePlayerCollLayer[18] = false;
+	EditorToy.particlePlayerCollLayer[19] = false;
+	EditorToy.particlePlayerCollLayer[20] = false;
+	EditorToy.particlePlayerCollLayer[21] = false;
+	EditorToy.particlePlayerCollLayer[22] = false;
+	EditorToy.particlePlayerCollLayer[23] = false;
+	EditorToy.particlePlayerCollLayer[24] = false;
+	EditorToy.particlePlayerCollLayer[25] = false;
+	EditorToy.particlePlayerCollLayer[26] = false;
+	EditorToy.particlePlayerCollLayer[27] = false;
+	EditorToy.particlePlayerCollLayer[28] = false;
+	EditorToy.particlePlayerCollLayer[29] = false;
+	EditorToy.particlePlayerCollLayer[30] = false;
+	EditorToy.particlePlayerCollLayer[31] = false;
+	
+	//ParticlePlayer collision groups
+	EditorToy.particlePlayerCollGroup[0] = false;
+	EditorToy.particlePlayerCollGroup[1] = false;
+	EditorToy.particlePlayerCollGroup[2] = false;
+	EditorToy.particlePlayerCollGroup[3] = false;
+	EditorToy.particlePlayerCollGroup[4] = false;
+	EditorToy.particlePlayerCollGroup[5] = false;
+	EditorToy.particlePlayerCollGroup[6] = false;
+	EditorToy.particlePlayerCollGroup[7] = false;
+	EditorToy.particlePlayerCollGroup[8] = false;
+	EditorToy.particlePlayerCollGroup[9] = false;
+	EditorToy.particlePlayerCollGroup[10] = false;
+	EditorToy.particlePlayerCollGroup[11] = false;
+	EditorToy.particlePlayerCollGroup[12] = false;
+	EditorToy.particlePlayerCollGroup[13] = false;
+	EditorToy.particlePlayerCollGroup[14] = false;
+	EditorToy.particlePlayerCollGroup[15] = false;
+	EditorToy.particlePlayerCollGroup[16] = false;
+	EditorToy.particlePlayerCollGroup[17] = false;
+	EditorToy.particlePlayerCollGroup[18] = false;
+	EditorToy.particlePlayerCollGroup[19] = false;
+	EditorToy.particlePlayerCollGroup[20] = false;
+	EditorToy.particlePlayerCollGroup[21] = false;
+	EditorToy.particlePlayerCollGroup[22] = false;
+	EditorToy.particlePlayerCollGroup[23] = false;
+	EditorToy.particlePlayerCollGroup[24] = false;
+	EditorToy.particlePlayerCollGroup[25] = false;
+	EditorToy.particlePlayerCollGroup[26] = false;
+	EditorToy.particlePlayerCollGroup[27] = false;
+	EditorToy.particlePlayerCollGroup[28] = false;
+	EditorToy.particlePlayerCollGroup[29] = false;
+	EditorToy.particlePlayerCollGroup[30] = false;
+	EditorToy.particlePlayerCollGroup[31] = false;
 	
 	//create directory
 	/*
@@ -1037,7 +1147,14 @@ function EditorToy::onTouchDragged(%this, %touchID, %worldPosition)
 	if ( isObject(%scene.SelectedObject[%touchID]) )
 	{
 		//we dont want to pan around while we have an object selected.
-		%scene.SelectedObject[%touchID].Position = %worldPosition;
+		if(%scene.SelectedObject[%touchID].locked == 1)
+		{
+			return;
+		}
+		else
+		{
+			%scene.SelectedObject[%touchID].Position = %worldPosition;
+		}
 	}
 }
 
@@ -1230,6 +1347,10 @@ function EditorToy::createObjectMenu(%this, %obj)
 	{
 		SpriteAssetMenu.setVisible(0);
 	}
+	if(%className !$= "ParticlePlayer")
+	{
+		ParticlePlayerAssetMenu.setVisible(0);
+	}
 	if(%className !$= "Scroller")
 	{
 		ScrollerAssetMenu.setVisible(0);
@@ -1333,6 +1454,7 @@ function EditorToy::createObjectMenu(%this, %obj)
 		%this.updateSpriteBlendA(%blendA);
 		
 		//Update our gui
+		SpriteLockBttn.update();
 		SpriteName.update();
 		SpriteClass.update();
 		SpriteAngle.update();
@@ -1372,6 +1494,7 @@ function EditorToy::createObjectMenu(%this, %obj)
 	{
 		//Initializers
 		CompSpriteAssetMenu.setVisible(1);
+		
 		%this.selObject = %obj;
 		%pos = %obj.getPosition();
 		%width = %obj.getWidth();
@@ -1471,6 +1594,7 @@ function EditorToy::createObjectMenu(%this, %obj)
 		%this.updateCompSpriteBlendA(%blendA);
 		
 		//Update our gui
+		CompSpriteLockBttn.update();
 		CompSpriteName.update();
 		CompSpriteClass.update();
 		CompSpriteAngle.update();
@@ -1594,6 +1718,7 @@ function EditorToy::createObjectMenu(%this, %obj)
 		%this.updateScrollerBlendA(%blendA);
 		
 		//Update our gui
+		ScrollerLockBttn.update();
 		ScrollerName.update();
 		ScrollerClass.update();
 		ScrollerAngularDamp.update();
@@ -1628,6 +1753,123 @@ function EditorToy::createObjectMenu(%this, %obj)
 		ScrollerSrcBlendList.update();
 		ScrollerDstBlendList.update();
 	}
+
+	if(%className $= "ParticlePlayer")
+	{
+		%this.selObject = %obj;
+		ParticlePlayerAssetMenu.setVisible(1);
+		//Initializers
+		%name = %obj.getName();
+		%class = %obj.getClassNamespace();
+		%pos = %obj.getPosition();
+		%width = %obj.getWidth();
+		%height = %obj.getHeight();
+		%body = %obj.getBodyType();
+		%ang = %obj.getAngle();
+		%fixAng = %obj.getFixedAngle();
+		%angDam = %obj.getAngularDamping();
+		%angVel = %obj.getAngularVelocity();
+		%linVelX = %obj.getLinearVelocityX();
+		%linVelY = %obj.getLinearVelocityY();
+		%linVelPol = %obj.getLinearVelocityPolar();
+		%linVelPolAng = getWord(%linVelPol, 0);
+		%linVelPolSpeed = getWord(%linVelPol, 1);
+		%linDam = %obj.getLinearDamping();
+		%defDen = %obj.getDefaultDensity();
+		%defFri = %obj.getDefaultFriction();
+		%defRes = %obj.getDefaultRestitution();
+		%collSupp = %obj.getCollisionSuppress();
+		%collOne = %obj.getCollisionOneWay();
+		%colNum = %obj.getCollisionShapeCount();
+		%grav = %obj.getGravityScale();
+		%sceneLay = %obj.getSceneLayer();
+		%sceneGroup = %obj.getSceneGroup();
+		%collLayers = %obj.getCollisionLayers();
+		%collGroups = %obj.getCollisionGroups();
+		%alphaTest = %obj.getAlphaTest();
+		%blendMode = %obj.getBlendMode();
+		%srcBlend = %obj.getSrcBlendFactor();
+		%dstBlend = %obj.getDstBlendFactor();
+		%blendCol = %obj.getBlendColor();
+		%blendR = getWord(%blendCol,0);
+		%blendG = getWord(%blendCol,1);
+		%blendB = getWord(%blendCol,2);
+		%blendA = %obj.getBlendAlpha();
+		
+		//Update our defaults
+		%this.updateSelParticlePlayer(%obj);
+		%this.updateParticlePlayerPosX(%pos.x);
+		%this.updateParticlePlayerPosY(%pos.y);
+		%this.updateParticlePlayerHeight(%height);
+		%this.updateParticlePlayerWidth(%width);
+		%this.updateParticlePlayerBody(%body);
+		%this.updateParticlePlayerName(%name);
+		%this.updateParticlePlayerClass(%class);
+		%this.updateParticlePlayerAngle(%ang);
+		%this.updateParticlePlayerFixedAngle(%fixAng);
+		%this.updateParticlePlayerAngDamp(%angDam);
+		%this.updateParticlePlayerAngVel(%angVel);
+		%this.updateParticlePlayerLinVelX(%linVelX);
+		%this.updateParticlePlayerLinVelY(%linVelY);
+		%this.updateParticlePlayerLinVelPolAngle(%linVelPolAng);
+		%this.updateParticlePlayerLinVelPolSpeed(%linVelPolSpeed);
+		%this.updateParticlePlayerLinDamp(%linDam);
+		%this.updateParticlePlayerDefDensity(%defDen);
+		%this.updateParticlePlayerDefFriction(%defFri);
+		%this.updateParticlePlayerDefRestitution(%defRes);
+		%this.updateParticlePlayerCollSupp(%collSupp);
+		%this.updateParticlePlayerCollOne(%collOne);
+		%this.updateParticlePlayerCollShapeCount();
+		%this.updateParticlePlayerGravity(%grav);
+		%this.updateParticlePlayerSceneLayer(%sceneLay);
+		%this.updateParticlePlayerSceneGroup(%sceneGroup);
+		%this.updateParticlePlayerCollLayers(%collLayers);
+		%this.updateParticlePlayerCollGroups(%collGroups);
+		%this.loadParticlePlayerCollLayerArray();
+		%this.loadParticlePlayerCollGroupArray();
+		%this.updateParticlePlayerAlphaTest(%alphaTest);
+		%this.updateParticlePlayerBlendMode(%blendMode);
+		%this.updateParticlePlayerSrcBlend(%srcBlend);
+		%this.updateParticlePlayerDstBlend(%dstBlend);
+		%this.updateParticlePlayerBlendR(%blendR);
+		%this.updateParticlePlayerBlendG(%blendG);
+		%this.updateParticlePlayerBlendB(%blendB);
+		%this.updateParticlePlayerBlendA(%blendA);
+		
+		//Update our gui
+		ParticlePlayerLockBttn.update();
+		ParticlePlayerName.update();
+		ParticlePlayerClass.update();
+		ParticlePlayerAngle.update();
+		ParticlePlayerFixedAngle.update();
+		ParticlePlayerAngularDamp.update();
+		ParticlePlayerAngularVel.update();
+		ParticlePlayerLinearVelX.update();
+		ParticlePlayerLinearVelY.update();
+		ParticlePlayerLinearVelPolAngle.update();
+		ParticlePlayerLinearVelPolSpeed.update();
+		ParticlePlayerLinearDamp.update();
+		ParticlePlayerDefDensity.update();
+		ParticlePlayerDefFriction.update();
+		ParticlePlayerDefRestitution.update();
+		ParticlePlayerCollSuppress.update();
+		ParticlePlayerCollOneWay.update();
+		ParticlePlayerPosX.update();
+		ParticlePlayerPosY.update();
+		ParticlePlayerWidth.update();
+		ParticlePlayerHeight.update();
+		ParticlePlayerBodyList.update();
+		%this.updateParticlePlayerCollGui();
+		ParticlePlayerGravity.update();
+		ParticlePlayerSceneLayer.update();
+		ParticlePlayerSceneGroup.update();
+		ParticlePlayerAlphaTest.update();
+		ParticlePlayerBlendMode.update();
+		ParticlePlayerBlendA.update();
+		ParticlePlayerSrcBlendList.update();
+		ParticlePlayerDstBlendList.update();
+	}
+
 
 }
 function EditorToy::activateModuleLoadBttn(%this)
@@ -1687,6 +1929,7 @@ function EditorToy::hideAssetMenus(%this)
 	RectToolsDisplay.setVisible(0);
 	CompSpriteSpriteMenu.setVisible(0);
 	ScrollerAssetMenu.setVisible(0);
+	ParticlePlayerAssetMenu.setVisible(0);
 }
 //Steering Behaviors test
 /*function EditorToy::testObject(%this)
@@ -2204,6 +2447,13 @@ function EditorToy::finishPolyShape(%this)
 		%this.updateCompSpriteCollShapeCount();
 		%this.updateCompSpriteCollGui();
 	}
+	
+	else if(%className $= "ParticlePlayer")
+	{	
+		%this.updateParticlePlayer();
+		%this.updateParticlePlayerCollShapeCount();
+		%this.updateParticlePlayerCollGui();
+	}
 }
 
 function EditorToy::resetPolyListPosLocal(%this)
@@ -2379,5 +2629,60 @@ function LockState::onClick(%this)
 		{
 			SpriteScroll.setVisible(1);
 		}
+	}
+}
+
+function EditorToy::lockObject(%this)
+{
+	
+	%obj = EditorToy.selObject;
+	%className = %obj.getClassName();
+	if(%obj.locked == 1)
+	{
+		%obj.locked = 0;
+		if(%className $= "CompositeSprite")
+		{
+			CompSpriteScroll.setVisible(1);
+		}
+		
+		if(%className $= "Sprite")
+		{
+			SpriteScroll.setVisible(1);
+		}
+		
+		if(%className $= "Scroller")
+		{
+			ScrollerScroll.setVisible(1);
+		}
+		
+		if(%className $= "ParticlePlayer")
+		{
+			ParticlePlayerScroll.setVisible(1);
+		}
+		
+	}
+	else
+	{
+		%obj.locked = 1;
+		if(%className $= "CompositeSprite")
+		{
+			CompSpriteScroll.setVisible(0);
+		}
+		
+		if(%className $= "Sprite")
+		{
+			SpriteScroll.setVisible(0);
+		}
+		
+		if(%className $= "Scroller")
+		{
+			ScrollerScroll.setVisible(0);
+		}
+		
+		if(%className $= "ParticlePlayer")
+		{
+			ParticlePlayerScroll.setVisible(0);
+		}
+		
 	}
 }

@@ -29,6 +29,17 @@ function EditorToy::loadCompSpriteAsset(%this)
 	}
 }
 
+function CompSpriteLockBttn::update(%this)
+{
+	%obj = EditorToy.selObject;
+	%value = %obj.locked;
+	if(%value == 1)
+	{
+		CompSpriteScroll.setVisible(0);
+	}
+	%this.setStateOn(%value);
+}
+
 function EditorToy::createRectComp(%this)
 {
 	CompSpritePopout.setVisible(0);

@@ -260,9 +260,11 @@ function EditorToy::updatePreviewAnim(%this)
 	%frames = EditorToy.animationFrame;
 	%time = EditorToy.animationTime;
 	%loop = EditorToy.animationLoop;
+	%rand = EditorToy.animationRand;
 	PreviewAnim.setAnimationFrames(%frames);
 	PreviewAnim.setAnimationTime(%time);
 	PreviewAnim.setAnimationCycle(%loop);
+	PreviewAnim.RandomStart = %rand;
 }
 
 function AnimName::update(%this)
@@ -303,6 +305,13 @@ function AnimLoop::onReturn(%this)
 	EditorToy.updatePreviewAnim();
 }
 
+function AnimRand::onReturn(%this)
+{
+	%value = %this.getStateOn();
+	EditorToy.updateAnimationRand(%value);
+	EditorToy.updatePreviewAnim();
+}
+
 function EditorToy::exportAnimationTaml(%this)
 {
 	%mName = EditorToy.moduleName;
@@ -311,6 +320,8 @@ function EditorToy::exportAnimationTaml(%this)
 	%img = EditorToy.animationImage;
 	%loop = EditorToy.animationLoop;
 	%time = EditorToy.animationTime;
+	%rand = EditorToy.animationRand;
+	PreviewAnimation.delete();
 	
 	%defaultLocation = "^EditorToy/projects/"@ %mName @ "/1/assets/animations/";
 	%defaultTaml = "^EditorToy/assets/defaults/empty.taml";
@@ -325,6 +336,7 @@ function EditorToy::exportAnimationTaml(%this)
 	%file.writeLine("	AnimationFrames=\"" @ %frames @ "\"");
 	%file.writeLine("	AnimationTime=\"" @ %time @ "\"");
 	%file.writeLine("	AnimationCycle=\"" @ %loop @ "\"");
+	%file.writeLine("	RandomStart=\"" @ %rand @ "\"");
 	%file.writeLine("/>");
 	%file.close();
 	

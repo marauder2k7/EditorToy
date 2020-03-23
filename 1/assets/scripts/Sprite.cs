@@ -30,6 +30,17 @@ function EditorToy::loadSpriteAsset(%this)
 	}
 }
 
+function SpriteLockBttn::update(%this)
+{
+	%obj = EditorToy.selObject;
+	%value = %obj.locked;
+	if(%value == 1)
+	{
+		SpriteScroll.setVisible(0);
+	}
+	%this.setStateOn(%value);
+}
+
 function EditorToy::createSprite(%this, %assetFile)
 {
 

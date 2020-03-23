@@ -29,6 +29,17 @@ function EditorToy::loadScrollerAsset(%this)
 	}
 }
 
+function ScrollerLockBttn::update(%this)
+{
+	%obj = EditorToy.selObject;
+	%value = %obj.locked;
+	if(%value == 1)
+	{
+		ScrollerScroll.setVisible(0);
+	}
+	%this.setStateOn(%value);
+}
+
 function EditorToy::createScroller(%this, %assetFile)
 {
 	%scene = EditorToy.activeScene;
