@@ -250,12 +250,12 @@ function EditorToy::populateAssetSims(%this)
 	//we could be passing through a lot of items here
 	for(%i = 0; %i < %count; %i++)
 	{
-		echo(%i);
 		%asset = AssetList.getAsset(%i);
 		%asMod = AssetDatabase.getAssetModule(%asset);
 		if(%asMod $= %module)
 		{
 			%type = AssetDatabase.getAssetType(%asset);
+			echo(%type);
 			if(%type $= "ImageAsset")
 			{
 				%simOb = new SimObject(%asset);
@@ -265,6 +265,11 @@ function EditorToy::populateAssetSims(%this)
 			{
 				%simOb = new SimObject(%asset);
 				AnimationSim.add(%simOb);
+			}
+			else if(%type $= "ParticleAsset")
+			{
+				%simOb = new SimObject(%asset);
+				ParticleSim.add(%simOb);
 			}
 		}
 		

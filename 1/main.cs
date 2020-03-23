@@ -26,6 +26,8 @@ function EditorToy::create(%this)
 	exec("./assets/scripts/Scroller.cs");
 	exec("./assets/scripts/CompSprite.cs");
 	exec("./assets/scripts/AnimationAsset.cs");
+	exec("./assets/scripts/ParticleAsset.cs");
+	exec("./assets/scripts/Emitter.cs");
 	//Load custom profiles
 	exec("./assets/gui/editorGuiProfiles.cs");
 	exec("./assets/gui/EditorMenu.gui");
@@ -76,6 +78,12 @@ function EditorToy::create(%this)
 	//Set it to the scene.
     PolyEditorWindow.setScene( SandboxScene );
 	EditorToy.add(PolyEditorWindow);
+	
+	
+	//ParticleAsset
+	EditorToy.activeParticleAsset = "";
+	EditorToy.particleAssetName = "";
+	EditorToy.particleLifeMode = "";
 	
 	//Editor user view
 	EditorToy.aspectRatio = 0.0; 
@@ -532,6 +540,7 @@ function EditorToy::create(%this)
 	%this.createImageAssetMenu();
 	%this.createPolyEditorMenu();
 	%this.createRectLayoutMenu();
+	%this.createAnimationAssetMenu();
 	//%this.createSimSets();
 	// Reset the toy.
 	//Remove default input listener

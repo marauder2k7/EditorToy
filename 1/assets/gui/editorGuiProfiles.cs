@@ -182,3 +182,32 @@ if(!isObject(EraserCursor)) new GuiCursor(EraserCursor)
 	bitmapName = "^EditorToy/assets/gui/images/EraserMouse";
 };
 
+if( !isObject( GuiTabBookProfile ) ) new GuiControlProfile( GuiTabBookProfile )
+{
+   fillColorHL = "100 100 100";
+   fillColorNA = "150 150 150";
+   fontColor = "30 30 30";
+   fontColorHL = "0 0 0";
+   fontColorNA = "50 50 50";
+   fontType = "Arial";
+   fontSize = 14;
+   justify = "center";
+   bitmap = "^EditorToy/assets/gui/images/tab";
+   tabWidth = 64;
+   tabHeight = 24;
+   tabPosition = "Top";
+   tabRotation = "Horizontal";
+   textOffset = "0 -3";
+   tab = true;
+   cankeyfocus = true;
+};
+
+if( !isObject( GuiTabPageProfile ) ) new GuiControlProfile( GuiTabPageProfile : GuiDefaultProfile )
+{
+   fontType = "Arial";
+   fontSize = 10;
+   justify = "center";
+   bitmap = "^EditorToy/assets/gui/images/tab";
+   opaque = false;
+   fillColor = "240 239 238";
+};

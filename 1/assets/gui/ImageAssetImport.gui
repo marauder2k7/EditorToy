@@ -3,8 +3,8 @@
    position = "0 0";
    extent = "1024 768";
    minExtent = "8 2";
-   horizSizing = "right";
-   vertSizing = "bottom";
+   horizSizing = "width";
+   vertSizing = "height";
    profile = "GuiDefaultProfile";
    visible = "0";
    active = "1";

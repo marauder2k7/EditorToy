@@ -86,6 +86,11 @@ function EditorToy::saveScene(%this)
 	{
 		CameraObject.delete();
 	}
+	
+	if(isObject (ParticlePlayground))
+	{
+		ParticlePlayground.delete();
+	}
 	%scene = EditorToy.activeScene;
 	%sceneName = %scene.getName();
 	%mName = EditorToy.moduleName;
