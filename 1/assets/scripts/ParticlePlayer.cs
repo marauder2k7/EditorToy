@@ -39,6 +39,7 @@ function EditorToy::createParticlePlayer(%this, %assetFile)
 function EditorToy::updateParticlePlayer(%this)
 {
 	//Initialize our data
+	%asset = EditorToy.particlePlayerParticle;
 	%obj = EditorToy.selParticlePlayer;
 	%name = EditorToy.particlePlayerName;
 	%class = EditorToy.particlePlayerClass;
@@ -51,6 +52,11 @@ function EditorToy::updateParticlePlayer(%this)
 	%body = EditorToy.particlePlayerBody;
 	%ang = EditorToy.particlePlayerAngle;
 	%fixAng = EditorToy.particlePlayerFixedAngle;
+	%iDistance = EditorToy.particlePlayerIdleDistance;
+	%eScale = EditorToy.particlePlayerEmissionScale;
+	%sScale = EditorToy.particlePlayerSizeScale;
+	%fScale = EditorToy.particlePlayerForceScale;
+	%tScale = EditorToy.particlePlayerTimeScale; 
 	%angDam = EditorToy.particlePlayerAngDamp;
 	%angVel = EditorToy.particlePlayerAngVel;
 	%linVelX = EditorToy.particlePlayerLinVelX;
@@ -86,6 +92,11 @@ function EditorToy::updateParticlePlayer(%this)
 	%obj.setBodyType(%body);
 	%obj.setAngle(%ang);
 	%obj.setFixedAngle(%fixAng);
+	%obj.setCameraIdleDistance(%iDistance);
+	%obj.setEmissionRateScale(%eScale);
+	%obj.setSizeScale(%sScale);
+	%obj.setTimeScale(%tScale);
+	%obj.setForceScale(%fScale);
 	%obj.setAngularDamping(%angDam);
 	%obj.setAngularVelocity(%angVel);
 	%obj.setLinearVelocity(%linVelX, %linVelY);
@@ -153,10 +164,42 @@ function EditorToy::updateParticlePlayer(%this)
 
 //-----------------------------------------------------------------------------
 //Update ParticlePlayer Values
+
+function EditorToy::updateParticlePlayerParticle(%this, %value)
+{
+	%this.particlePlayerParticle = %value;
+}
+
+function EditorToy::updateParticlePlayerIdleDistance(%this, %value)
+{
+	%this.particlePlayerIdleDistance = %value;
+}
+
+function EditorToy::updateParticlePlayerEmissionScale(%this, %value)
+{
+	%this.particlePlayerEmissionScale = %value;
+}
+
+function EditorToy::updateParticlePlayerSizeScale(%this, %value)
+{
+	%this.particlePlayerSizeScale = %value;
+}
+
+function EditorToy::updateParticlePlayerForceScale(%this, %value)
+{
+	%this.particlePlayerForceScale = %value;
+}
+
+function EditorToy::updateParticlePlayerTimeScale(%this, %value)
+{
+	%this.particlePlayerTimeScale = %value;
+}
+
 function EditorToy::updateSelParticlePlayer(%this, %obj)
 {
 	%this.selParticlePlayer = %obj;
 }
+
 function EditorToy::updateParticlePlayerPosX(%this, %value)
 {
 	%this.particlePlayerPosX = %value;
@@ -2494,57 +2537,283 @@ function EditorToy::deleteParticlePlayerColShape(%this, %collId)
 	EditorToy.updateParticlePlayerCollGui();
 }
 
-//ParticlePlayer Frame
-function ParticlePlayerFrame::onAdd(%this)
+function ParticlePlayerParticleList::onAdd(%this)
 {
-	%text = EditorToy.particlePlayerFrame;
-	%this.setText(%text);
+	%count = ParticleSim.getCount();
+	for(%i = 0; %i < %count; %i++)
+	{
+		%this.add(ParticleSim.getObject(%i).getName(), %i);
+	}
+
 }
 
-function ParticlePlayerFrame::update(%this)
+function ParticlePlayerParticleList::update(%this)
 {
-	%text = EditorToy.particlePlayerFrame;
-	%this.setText(%text);
+	%count = ParticleSim.getCount();
+	%this.clear();
+	for(%i = 0; %i < %count; %i++)
+	{
+		%this.add(ParticleSim.getObject(%i).getName(), %i);
+	}
+	
+	%value = EditorToy.particlePlayerParticle;
+	%value2 = %this.findText(%value);
+	%this.setSelected(%value2);
 }
 
-function ParticlePlayerFrame::onReturn(%this)
+function ParticlePlayerParticleList::onReturn(%this)
 {
 	%value = %this.getText();
-	EditorToy.updateParticlePlayerFrame(%value);
+	
+	EditorToy.updateParticlePlayerParticle(%value);
 	EditorToy.updateParticlePlayer();
 }
 
-function ParticlePlayerFrame::onLoseFirstResponder(%this)
+//ParticlePlayer IdleDistance
+function ParticlePlayerIdleDistance::onAdd(%this)
+{
+	%text = EditorToy.particlePlayerIdleDistance;
+	%this.setText(%text);
+}
+
+function ParticlePlayerIdleDistance::update(%this)
+{
+	%text = EditorToy.particlePlayerIdleDistance;
+	%this.setText(%text);
+}
+
+function ParticlePlayerIdleDistance::onReturn(%this)
 {
 	%value = %this.getText();
-	EditorToy.updateParticlePlayerFrame(%value);
+	EditorToy.updateParticlePlayerIdleDistance(%value);
 	EditorToy.updateParticlePlayer();
 }
 
-function ParticlePlayerFrame::lowerAmount(%this)
+function ParticlePlayerIdleDistance::onLoseFirstResponder(%this)
+{
+	%value = %this.getText();
+	EditorToy.updateParticlePlayerIdleDistance(%value);
+	EditorToy.updateParticlePlayer();
+}
+
+function ParticlePlayerIdleDistance::lowerAmount(%this)
 {
     %value = %this.getText();
 	%value--;
 	if(%value < 0)
 		%value = 0;
-	EditorToy.updateParticlePlayerFrame(%value);
+	EditorToy.updateParticlePlayerIdleDistance(%value);
     %text = %value;
     %this.setText(%text);
 	EditorToy.updateParticlePlayer();
 }
 
-function ParticlePlayerFrame::raiseAmount(%this)
+function ParticlePlayerIdleDistance::raiseAmount(%this)
 {
-	%asset = EditorToy.selParticlePlayer.getImage();
-	%image = AssetDatabase.acquireAsset(%asset);
-	%frameCount = %image.getFrameCount();
-	//ParticlePlayer ImageFrame starts at 0
-	%frameCount = %frameCount - 1;
+
     %value = %this.getText();
 	%value++;
-	if(%value > %frameCount)
-		%value = %frameCount;
-	EditorToy.updateParticlePlayerFrame(%value);
+	EditorToy.updateParticlePlayerIdleDistance(%value);
+    %text = %value;
+    %this.setText(%text);
+	EditorToy.updateParticlePlayer();
+}
+
+//ParticlePlayer EmissionScale
+function ParticlePlayerEmissionScale::onAdd(%this)
+{
+	%text = EditorToy.particlePlayerEmissionScale;
+	%this.setText(%text);
+}
+
+function ParticlePlayerEmissionScale::update(%this)
+{
+	%text = EditorToy.particlePlayerEmissionScale;
+	%this.setText(%text);
+}
+
+function ParticlePlayerEmissionScale::onReturn(%this)
+{
+	%value = %this.getText();
+	EditorToy.updateParticlePlayerEmissionScale(%value);
+	EditorToy.updateParticlePlayer();
+}
+
+function ParticlePlayerEmissionScale::onLoseFirstResponder(%this)
+{
+	%value = %this.getText();
+	EditorToy.updateParticlePlayerEmissionScale(%value);
+	EditorToy.updateParticlePlayer();
+}
+
+function ParticlePlayerEmissionScale::lowerAmount(%this)
+{
+    %value = %this.getText();
+	%value--;
+	if(%value < 0)
+		%value = 0;
+	EditorToy.updateParticlePlayerEmissionScale(%value);
+    %text = %value;
+    %this.setText(%text);
+	EditorToy.updateParticlePlayer();
+}
+
+function ParticlePlayerEmissionScale::raiseAmount(%this)
+{
+
+    %value = %this.getText();
+	%value++;
+	EditorToy.updateParticlePlayerEmissionScale(%value);
+    %text = %value;
+    %this.setText(%text);
+	EditorToy.updateParticlePlayer();
+}
+
+//ParticlePlayer SizeScale
+function ParticlePlayerSizeScale::onAdd(%this)
+{
+	%text = EditorToy.particlePlayerSizeScale;
+	%this.setText(%text);
+}
+
+function ParticlePlayerSizeScale::update(%this)
+{
+	%text = EditorToy.particlePlayerSizeScale;
+	%this.setText(%text);
+}
+
+function ParticlePlayerSizeScale::onReturn(%this)
+{
+	%value = %this.getText();
+	EditorToy.updateParticlePlayerSizeScale(%value);
+	EditorToy.updateParticlePlayer();
+}
+
+function ParticlePlayerSizeScale::onLoseFirstResponder(%this)
+{
+	%value = %this.getText();
+	EditorToy.updateParticlePlayerSizeScale(%value);
+	EditorToy.updateParticlePlayer();
+}
+
+function ParticlePlayerSizeScale::lowerAmount(%this)
+{
+    %value = %this.getText();
+	%value--;
+	if(%value < 0)
+		%value = 0;
+	EditorToy.updateParticlePlayerSizeScale(%value);
+    %text = %value;
+    %this.setText(%text);
+	EditorToy.updateParticlePlayer();
+}
+
+function ParticlePlayerSizeScale::raiseAmount(%this)
+{
+
+    %value = %this.getText();
+	%value++;
+	EditorToy.updateParticlePlayerSizeScale(%value);
+    %text = %value;
+    %this.setText(%text);
+	EditorToy.updateParticlePlayer();
+}
+
+//ParticlePlayer ForceScale
+function ParticlePlayerForceScale::onAdd(%this)
+{
+	%text = EditorToy.particlePlayerForceScale;
+	%this.setText(%text);
+}
+
+function ParticlePlayerForceScale::update(%this)
+{
+	%text = EditorToy.particlePlayerForceScale;
+	%this.setText(%text);
+}
+
+function ParticlePlayerForceScale::onReturn(%this)
+{
+	%value = %this.getText();
+	EditorToy.updateParticlePlayerForceScale(%value);
+	EditorToy.updateParticlePlayer();
+}
+
+function ParticlePlayerForceScale::onLoseFirstResponder(%this)
+{
+	%value = %this.getText();
+	EditorToy.updateParticlePlayerForceScale(%value);
+	EditorToy.updateParticlePlayer();
+}
+
+function ParticlePlayerForceScale::lowerAmount(%this)
+{
+    %value = %this.getText();
+	%value--;
+	if(%value < 0)
+		%value = 0;
+	EditorToy.updateParticlePlayerForceScale(%value);
+    %text = %value;
+    %this.setText(%text);
+	EditorToy.updateParticlePlayer();
+}
+
+function ParticlePlayerForceScale::raiseAmount(%this)
+{
+
+    %value = %this.getText();
+	%value++;
+	EditorToy.updateParticlePlayerForceScale(%value);
+    %text = %value;
+    %this.setText(%text);
+	EditorToy.updateParticlePlayer();
+}
+
+//ParticlePlayer TimeScale
+function ParticlePlayerTimeScale::onAdd(%this)
+{
+	%text = EditorToy.particlePlayerTimeScale;
+	%this.setText(%text);
+}
+
+function ParticlePlayerTimeScale::update(%this)
+{
+	%text = EditorToy.particlePlayerTimeScale;
+	%this.setText(%text);
+}
+
+function ParticlePlayerTimeScale::onReturn(%this)
+{
+	%value = %this.getText();
+	EditorToy.updateParticlePlayerTimeScale(%value);
+	EditorToy.updateParticlePlayer();
+}
+
+function ParticlePlayerTimeScale::onLoseFirstResponder(%this)
+{
+	%value = %this.getText();
+	EditorToy.updateParticlePlayerTimeScale(%value);
+	EditorToy.updateParticlePlayer();
+}
+
+function ParticlePlayerTimeScale::lowerAmount(%this)
+{
+    %value = %this.getText();
+	%value--;
+	if(%value < 0)
+		%value = 0;
+	EditorToy.updateParticlePlayerTimeScale(%value);
+    %text = %value;
+    %this.setText(%text);
+	EditorToy.updateParticlePlayer();
+}
+
+function ParticlePlayerTimeScale::raiseAmount(%this)
+{
+
+    %value = %this.getText();
+	%value++;
+	EditorToy.updateParticlePlayerTimeScale(%value);
     %text = %value;
     %this.setText(%text);
 	EditorToy.updateParticlePlayer();

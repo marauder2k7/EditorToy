@@ -542,16 +542,20 @@ function EditorToy::create(%this)
 	
 	//SetParticlePlayerDefaults
 	EditorToy.selParticlePlayer = null;
+	EditorToy.particlePlayerParticle = "";
 	EditorToy.particlePlayerName = "";
 	EditorToy.particlePlayerClass = "";
 	EditorToy.particlePlayerPosX = 0.0;
 	EditorToy.particlePlayerPosY = 0.0;
 	EditorToy.particlePlayerWidth = 0.0;
 	EditorToy.particlePlayerHeight = 0.0;
-	EditorToy.particlePlayerFlipX = false;
-	EditorToy.particlePlayerFlipY = false;
 	EditorToy.particlePlayerAngle = 0;
 	EditorToy.particlePlayerFixedAngle = false;
+	EditorToy.particlePlayerIdleDistance = 0;
+	EditorToy.particlePlayerEmissionScale = 0;
+	EditorToy.particlePlayerSizeScale = 0;
+	EditorToy.particleForceScale = 0;
+	EditorToy.particleTimeScale = 0;
 	EditorToy.particlePlayerAngVel = 0;
 	EditorToy.particlePlayerAngDamp = 0;
 	EditorToy.particlePlayerLinVelX = 0;
@@ -566,7 +570,6 @@ function EditorToy::create(%this)
 	EditorToy.particlePlayerCollSupp = false;
 	EditorToy.particlePlayerBody = 0;
 	EditorToy.particlePlayerCollShapeCount = 0;
-	EditorToy.particlePlayerFrame = 0;
 	EditorToy.particlePlayerGravity = 1.0;
 	EditorToy.particlePlayerSceneLayer = 0;
 	EditorToy.particlePlayerSceneGroup = 0;
@@ -1788,6 +1791,7 @@ function EditorToy::createObjectMenu(%this, %obj)
 		%this.selObject = %obj;
 		ParticlePlayerAssetMenu.setVisible(1);
 		//Initializers
+		%asset = %obj.getParticleAsset();
 		%name = %obj.getName();
 		%class = %obj.getClassNamespace();
 		%pos = %obj.getPosition();
@@ -1796,6 +1800,11 @@ function EditorToy::createObjectMenu(%this, %obj)
 		%body = %obj.getBodyType();
 		%ang = %obj.getAngle();
 		%fixAng = %obj.getFixedAngle();
+		%iDistance = %obj.getCameraIdleDistance();
+		%eScale = %obj.getEmissionRateScale();
+		%sScale = %obj.getSizeScale();
+		%tScale = %obj.getTimeScale();
+		%fScale = %obj.getForceScale();
 		%angDam = %obj.getAngularDamping();
 		%angVel = %obj.getAngularVelocity();
 		%linVelX = %obj.getLinearVelocityX();
@@ -1826,6 +1835,7 @@ function EditorToy::createObjectMenu(%this, %obj)
 		%blendA = %obj.getBlendAlpha();
 		
 		//Update our defaults
+		%this.updateParticlePlayerParticle(%asset);
 		%this.updateSelParticlePlayer(%obj);
 		%this.updateParticlePlayerPosX(%pos.x);
 		%this.updateParticlePlayerPosY(%pos.y);
@@ -1836,6 +1846,10 @@ function EditorToy::createObjectMenu(%this, %obj)
 		%this.updateParticlePlayerClass(%class);
 		%this.updateParticlePlayerAngle(%ang);
 		%this.updateParticlePlayerFixedAngle(%fixAng);
+		%this.updateParticlePlayerEmissionScale(%eScale);
+		%this.updateParticlePlayerSizeScale(%sScale);
+		%this.updateParticlePlayerTimeScale(%tScale);
+		%this.updateParticlePlayerForceScale(%fScale);
 		%this.updateParticlePlayerAngDamp(%angDam);
 		%this.updateParticlePlayerAngVel(%angVel);
 		%this.updateParticlePlayerLinVelX(%linVelX);
@@ -1866,11 +1880,17 @@ function EditorToy::createObjectMenu(%this, %obj)
 		%this.updateParticlePlayerBlendA(%blendA);
 		
 		//Update our gui
+		ParticlePlayerParticleList.update();
 		ParticlePlayerLockBttn.update();
 		ParticlePlayerName.update();
 		ParticlePlayerClass.update();
 		ParticlePlayerAngle.update();
 		ParticlePlayerFixedAngle.update();
+		ParticlePlayerIdleDistance.update();
+		ParticlePlayerEmissionScale.update();
+		ParticlePlayerSizeScale.update();
+		ParticlePlayerForceScale.update();
+		ParticlePlayerTimeScale.update();
 		ParticlePlayerAngularDamp.update();
 		ParticlePlayerAngularVel.update();
 		ParticlePlayerLinearVelX.update();
