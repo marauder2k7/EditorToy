@@ -1,9 +1,3 @@
-function EditorToy::createAnimationAssetMenu(%this)
-{
-	exec("^EditorToy/assets/gui/AnimationBuilder.gui");
-	SandboxWindow.add(AnimationBuilder);
-}
-
 function EditorToy::createAnimationAsset(%this, %imgName)
 {
 	%mName = EditorToy.moduleName;

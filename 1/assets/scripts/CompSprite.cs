@@ -46,11 +46,6 @@ function EditorToy::createRectComp(%this)
 	RectDesigner.setVisible(1);
 }
 
-function EditorToy::createRectLayoutMenu(%this)
-{
-	SandboxWindow.add(RectDesigner);
-}
-
 function EditorToy::finalizeRect(%this)
 {
 	%this.updateCompSpriteLayout("rect");

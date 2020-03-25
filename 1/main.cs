@@ -33,6 +33,8 @@ function EditorToy::create(%this)
 	exec("./assets/gui/editorGuiProfiles.cs");
 	exec("./assets/gui/EditorMenu.gui");
 	SandboxWindow.add(LevelEditorGui);
+	%winExtent = SandboxWindow.getExtent();
+	LevelEditorGui.setExtent(%winExtent.x, %winExtent.y);
 	//Custom GUI must be exec after defaults are set
 	exec("./assets/gui/CreateModule.gui");
 	exec("./assets/gui/SceneCreate.gui");
@@ -40,9 +42,31 @@ function EditorToy::create(%this)
 	exec("./assets/gui/PolyEditor.gui");
 	exec("./assets/gui/ModuleLoad.gui");
 	exec("./assets/gui/RectLayout.gui");
+	exec("./assets/gui/AnimationBuilder.gui");
 	%this.deactivateToolbar();
 	ModuleLoadBttn.setActive(0);
 	scanForModules();
+	
+	SandboxWindow.add(ModuleCreate);
+	ModuleCreate.setExtent(%winExtent.x, %winExtent.y);
+	
+	SandboxWindow.add(ModuleLoad);
+	ModuleLoad.setExtent(%winExtent.x, %winExtent.y);
+	
+	SandboxWindow.add(SceneCreate);
+	SceneCreate.setExtent(%winExtent.x, %winExtent.y);
+	
+	SandboxWindow.add(AnimationBuilder);
+	AnimationBuilder.setExtent(%winExtent.x, %winExtent.y);
+	
+	SandboxWindow.add(RectDesigner);
+	RectDesigner.setExtent(%winExtent.x, %winExtent.y);
+	
+	SandboxWindow.add(ImageAssetMenu);
+	ImageAssetMenu.setExtent(%winExtent.x, %winExtent.y);
+	
+	SandboxWindow.add(PolyEditorMenu);
+	PolyEditorMenu.setExtent(%winExtent.x, %winExtent.y);
 	
 	%csEditImage = new GuiSpriteCtrl(CSEditImage)
 	{
@@ -78,6 +102,9 @@ function EditorToy::create(%this)
 	
 	//Set it to the scene.
     PolyEditorWindow.setScene( SandboxScene );
+	PolyEditorWindow.setCameraSize(570, 500);
+	EditorToy.polyAspect = 570 / 500;
+	
 	EditorToy.add(PolyEditorWindow);
 	
 	
@@ -643,14 +670,8 @@ function EditorToy::create(%this)
 	echo("Asset type = ", AssetDatabase.getAssetType(%assetId) );
 	*/
 	
-    //Create our menus here
-	%this.createModuleMenu();
-	%this.createSceneMenu();
-	%this.createModuleLoadMenu();
+    
 	%this.createImageAssetMenu();
-	%this.createPolyEditorMenu();
-	%this.createRectLayoutMenu();
-	%this.createAnimationAssetMenu();
 	//%this.createSimSets();
 	// Reset the toy.
 	//Remove default input listener
@@ -730,6 +751,20 @@ function EditorToy::destroy(%this)
     deactivatePackage( EditorToyPackage );
 }
 
+function SceneWindow::onExtentChange(%this)
+{
+	%extent = Canvas.extent;
+	EditorToy.aspectRatio = %extent.x / %extent.y;
+	
+	%editCamX = EditorToy.sceneCameraX * 2;
+	%editCamY = EditorToy.sceneCameraY * 2;
+	%aspect = EditorToy.aspectRatio;
+	%editCamX = %editCamY * %aspect;
+	
+	
+	SandboxWindow.setCameraSize(%editCamX,%editCamY);
+}
+
 function EditorToy::reset(%this)
 {   
     // Clear the scene.
@@ -745,6 +780,8 @@ function EditorToy::reset(%this)
     SandboxWindow.setCameraSize( %extent.x , %extent.y );
 	
 	%this.Init_controls();
+	
+	
 	
 	EditorControls.push();
 	
@@ -1247,14 +1284,6 @@ function EditorToy::onMouseWheelDown(%this)
 	{
 		SandboxWindow.setCameraZoom(0.1);
 	}
-}
-
-//Create Editor window
-function EditorToy::createEditorMenu(%this)
-{	
-	//Sandbox.add( TamlRead("./assets/gui/EditorMenu.gui.taml") );
-	exec("./assets/gui/EditorMenu.gui");
-	SandboxWindow.add(LevelEditorGui);
 }
 
 function EditorToy::hideObjMenus(%this)
@@ -2031,10 +2060,6 @@ function flee(%target, %pos, %maxVelocity, %currentVel)
 
 //-----------------------------------------------------------------------------
 //Create Poly Editor
-function EditorToy::createPolyEditorMenu(%this)
-{
-	SandboxWindow.add(PolyEditorMenu);
-}
 
 function EditorToy::updatePolylistMenuItems(%this)
 {
@@ -2289,7 +2314,7 @@ function EditorToy::createPolylistItem(%this, %pos)
 			return;
 		}
 	}
-	%size = EditorToy.selObject.getSize() / 10;
+	%size = PolyEditorWindow.getCameraSize() / 30;
 	
 	// Create the handle.
 	%obj = new ShapeVector();
@@ -2350,15 +2375,17 @@ function EditorToy::createPolyCollision(%this)
 	%objHeight = %obj.getHeight() * 1.5;
 	%objWidth = %obj.getWidth() * 1.5;
 	%objPos = %obj.getPosition();
-	%aspect = EditorToy.aspectRatio;
-	if(%objWidth < %objHeight)
+	%aspect = EditorToy.polyAspect;
+	if(%objHeight > %objWidth)
 	{
 		%objWidth = %objHeight * %aspect;
 	}
-	if(%objWidth > %objHeight)
+	else
 	{
 		%objHeight = %objWidth * %aspect;
 	}
+	
+	
 	%scene = %this.activeScene;
 	PolyEditorWindow.setScene(%scene);
     PolyEditorWindow.setCameraSize( %objWidth , %objHeight );
@@ -2428,7 +2455,7 @@ function EditorToy::finishPolyShape(%this)
 	%this.drawMode = false;
 	%obj = EditorToy.selObject;
 	%className = %obj.getClassName();
-	%obj.setPickingAllowed(true);
+	
 	if(%className $= "Scroller")
 	{
 		%this.updateScroller();
@@ -2459,8 +2486,8 @@ function EditorToy::finishPolyShape(%this)
 function EditorToy::resetPolyListPosLocal(%this)
 {
 	%this.polyListPosLocal = "";
-	
-	
+	%obj = EditorToy.selObject;
+	%obj.setPickingAllowed(true);
 	//Sanity
 	if(isObject(LineOverlay))
 	{
@@ -2552,10 +2579,67 @@ function CompSpritePopout::toggleVisible(%this)
 	}
 }
 
+function SceneCameraX::update(%this)
+{
+	%value = EditorToy.sceneCameraX;
+	%this.setText(%value);
+}
+
+function SceneCameraX::onReturn(%this)
+{
+	%value = %this.getText();
+	if(%value < 16)
+		%value = 16;
+	EditorToy.sceneCameraX = %value;
+}
+
+function SceneCameraX::onLoseFirstResponder(%this)
+{
+	%value = %this.getText();
+	if(%value < 16)
+		%value = 16;
+	EditorToy.sceneCameraX = %value;
+}
+
+function SceneCameraY::update(%this)
+{
+	%value = EditorToy.sceneCameraY;
+	%this.setText(%value);
+}
+
+function SceneCameraY::onReturn(%this)
+{
+	%value = %this.getText();
+	if(%value < 9)
+		%value = 9;
+	EditorToy.sceneCameraY = %value;
+}
+
+function SceneCameraY::onLoseFirstResponder(%this)
+{
+	%value = %this.getText();
+	if(%value < 9)
+		%value = 9;
+	EditorToy.sceneCameraY = %value;
+}
+
+function EditorToy::updateSceneCamera(%this)
+{
+	EditorToy.sceneCameraX = SceneCameraX.getText();
+	EditorToy.sceneCameraY = SceneCameraY.getText();
+	
+	CameraPopout.toggleVisible();
+	
+	EditorToy.setSceneWindowCamera();
+}
+
 function EditorToy::setSceneWindowCamera(%this)
 {
 	%editCamX = EditorToy.sceneCameraX * 2;
 	%editCamY = EditorToy.sceneCameraY * 2;
+	%aspect = EditorToy.aspectRatio;
+	%editCamX = %editCamY * %aspect;
+	
 	SandboxWindow.setCameraSize(%editCamX,%editCamY);
 	%this.createCamera();
 }

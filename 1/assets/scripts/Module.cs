@@ -1,10 +1,5 @@
 //-----------------------------------------------
 //MODULE CREATE
-function EditorToy::createModuleMenu(%this)
-{
-	SandboxWindow.add(ModuleCreate);
-}
-
 function EditorToy::createModule(%this)
 {
 	ModuleCreate.setVisible(1);
@@ -160,12 +155,6 @@ function EditorToy::writeModuleTaml(%this)
 }
 //-----------------------------------------------
 //MODULE LOAD
-
-function EditorToy::createModuleLoadMenu(%this)
-{
-	SandboxWindow.add(ModuleLoad);
-}
-
 function EditorToy::loadModuleMenu(%this)
 {
 	//

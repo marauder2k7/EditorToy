@@ -8,11 +8,6 @@ function EditorToy::resetSceneDefault(%this)
 	SceneName.setText("");
 }
 
-function EditorToy::createSceneMenu(%this)
-{
-	SandboxWindow.add(SceneCreate);
-}
-
 function EditorToy::createScene(%this)
 {
 	SceneCreate.setVisible(1);
@@ -187,6 +182,8 @@ function EditorToy::loadScenePref(%this)
 	EditorToy.sceneObjectX = $pref::Scene::ObjectSizeX;
 	EditorToy.sceneObjectY = $pref::Scene::ObjectSizeY;
 	
+	SceneCameraX.update();
+	SceneCameraY.update();
 	EditorToy.setSceneWindowCamera();
 	
 	%this.updateSceneEdit();

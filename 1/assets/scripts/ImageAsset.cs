@@ -54,7 +54,6 @@ function EditorToy::resetImageAssetDefaults(%this)
 //Create ImageAsset Menu
 function EditorToy::createImageAssetMenu(%this)
 {	
-	SandboxWindow.add(ImageAssetMenu);
 	ImagePreviewWindowHolder.add(ImagePreviewWindow);
 	FilterList.update();
 }
