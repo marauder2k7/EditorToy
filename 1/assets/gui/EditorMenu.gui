@@ -15927,7 +15927,7 @@
                         canSave = "1";
                         canSaveDynamicFields = "0";
                      };
-                     new GuiBitmapButtonCtrl(ParticlePlayerPlayBttn) {
+                     new GuiBitmapButtonCtrl(ParticlePlayerPauseBttn) {
                         bitmap = "^EditorToy/assets/gui/images/PauseBttn";
                         bitmapMode = "Stretched";
                         autoFitExtents = "0";
@@ -15946,13 +15946,13 @@
                         visible = "1";
                         active = "1";
                         tooltipProfile = "GuiToolTipProfile";
-                        tooltip = "Pause Physics simulation";
+                        tooltip = "Pause Particle Player";
                         hovertime = "1000";
                         isContainer = "0";
                         canSave = "1";
                         canSaveDynamicFields = "0";
                      };
-                     new GuiBitmapButtonCtrl(ParticlePlayerPauseBttn) {
+                     new GuiBitmapButtonCtrl(ParticlePlayerPlayBttn) {
                         bitmap = "^EditorToy/assets/gui/images/PlayBttn";
                         bitmapMode = "Stretched";
                         autoFitExtents = "0";
@@ -15971,7 +15971,7 @@
                         visible = "1";
                         active = "1";
                         tooltipProfile = "GuiToolTipProfile";
-                        tooltip = "Start Physics Simulation";
+                        tooltip = "Play Particle Player";
                         hovertime = "1000";
                         isContainer = "0";
                         canSave = "1";

@@ -630,6 +630,17 @@ function EditorToy::stringParticlePlayerCollGroupArray(%this)
 //-----------------------------------------------------------------------------
 //Update ParticlePlayer Menu
 //ParticlePlayer Pos X
+
+function ParticlePlayerPlayBttn::onClick(%this)
+{
+	EditorToy.selParticlePlayer.play();
+}
+
+function ParticlePlayerPauseBttn::onClick(%this)
+{
+	EditorToy.selParticlePlayer.setPaused(1);
+}
+
 function ParticlePlayerPosX::onAdd(%this)
 {
 	%text = EditorToy.particlePlayerPosX;
