@@ -427,7 +427,7 @@
          canSaveDynamicFields = "0";
       };
       new GuiButtonCtrl() {
-         text = "Cancel";
+         text = "Close";
          groupNum = "-1";
          buttonType = "PushButton";
          useMouseEvents = "0";
@@ -439,7 +439,7 @@
          profile = "BlueButtonProfile";
          visible = "1";
          active = "1";
-         command = "SandboxWindow.remove(AnimationBuilder);";
+         command = "EditorToy.closeAnimationBuilder();";
          tooltipProfile = "GuiToolTipProfile";
          hovertime = "1000";
          isContainer = "0";

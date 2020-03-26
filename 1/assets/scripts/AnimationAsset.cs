@@ -92,7 +92,6 @@ function EditorToy::loadAnimationAsset(%this)
 		//need to do it twice because assets are .asset.taml
 		//first fileBase takes it to .asset 
 		%num = AnimationSim.getCount();
-		echo(%num);
 		%imgName = fileBase(%defaultBase);
 		%animName = "Animation_" @ %num;
 		%this.updateAnimationName(%animName);
@@ -257,7 +256,7 @@ function EditorToy::updatePreviewAnim(%this)
 	%rand = EditorToy.animationRand;
 	PreviewAnim.setAnimationFrames(%frames);
 	PreviewAnim.setAnimationTime(%time);
-	PreviewAnim.setAnimationCycle(%loop);
+	//PreviewAnim.setAnimationCycle(%loop);
 	PreviewAnim.RandomStart = %rand;
 }
 
@@ -295,8 +294,9 @@ function AnimLoop::update(%this)
 function AnimLoop::onReturn(%this)
 {
 	%value = %this.getStateOn();
+	if(!isObject(FrameSim))
+		return;
 	EditorToy.updateAnimationLoop(%value);
-	EditorToy.updatePreviewAnim();
 }
 
 function AnimRand::onReturn(%this)
@@ -316,6 +316,7 @@ function EditorToy::exportAnimationTaml(%this)
 	%time = EditorToy.animationTime;
 	%rand = EditorToy.animationRand;
 	PreviewAnimation.delete();
+	PreviewWindow.clear();
 	
 	%defaultLocation = "^EditorToy/projects/"@ %mName @ "/1/assets/animations/";
 	%defaultTaml = "^EditorToy/assets/defaults/empty.taml";
@@ -350,7 +351,7 @@ function EditorToy::addAnimationAsset(%this, %assetFile)
 function EditorToy::resetAnimationAssetDefaults(%this)
 {
 	//SandboxWindow.remove(AnimationBuilder);
-	AnimationBuilder.setVisible(0);
+	//AnimationBuilder.setVisible(0);
 	EditorToy.populateAssetSims();
 	//Clear FrameStackSim
 	if(isObject(FrameStackSim))
@@ -371,10 +372,45 @@ function EditorToy::resetAnimationAssetDefaults(%this)
 			%object.delete();
 		}
 	}
-	%this.animationName = "default";
-	%this.animationImage = "default";
-	%this.animationFrame = "";
-	%this.animationTime = 1.0;
-	%this.animationLoop = false;
-	%this.animationRand = false;
+	%num = AnimationSim.getCount();
+	%animName = "Animation_" @ %num;
+	%this.updateAnimationName(%animName);
+	
+	%imgName = %this.animationImage;
+	%this.createAnimationAsset(%imgName);
+	%this.createPreviewAnim();
+}
+
+function EditorToy::closeAnimationBuilder(%this)
+{
+	AnimationBuilder.setVisible(0);
+	PreviewAnimation.delete();
+	PreviewWindow.clear();
+	if(isObject(FrameStackSim))
+	{
+		for (%i = FrameStackSim.getCount() -1; %i >= 0; %i-- )
+		{
+			%object = FrameStackSim.getObject(%i);
+			%object.delete();
+		}
+	}
+	
+	//Clear FrameSim
+	if(isObject(FrameSim))
+	{
+		for (%i = FrameSim.getCount() -1; %i >= 0; %i-- )
+		{
+			%object = FrameSim.getObject(%i);
+			%object.delete();
+		}
+	}
+	
+	//Reset Defaults
+	EditorToy.animationName = "default";
+	EditorToy.animationImage = "default";
+	EditorToy.animationFrame = "";
+	EditorToy.animationTime = 1.0;
+	EditorToy.animationLoop = false;
+	EditorToy.animationRand = false;
+	
 }
