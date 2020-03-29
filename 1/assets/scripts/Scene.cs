@@ -185,13 +185,40 @@ function EditorToy::loadScenePref(%this)
 	SceneCameraX.update();
 	SceneCameraY.update();
 	EditorToy.setSceneWindowCamera();
+	EditorToy.activeScene.setIsEditorScene(1);
 	
 	%this.updateSceneEdit();
 }
 
 function EditorToy::playScene(%this)
 {
+	//we have to save the scene first
+	if(isObject (CameraObject))
+	{
+		CameraObject.delete();
+	}
+	if(isObject (ParticlePlayground))
+	{
+		ParticlePlayground.delete();
+	}
+	%scene = EditorToy.activeScene;
+	%sceneName = %scene.getName();
+	%mName = EditorToy.moduleName;
+	TamlWrite(%scene, "modules/EditorToy/1/projects/"@ %mName @ "/1/assets/scenes/" @ %sceneName @ ".scene.taml" );
+	EditorToy.loadSimulation();
+}
+
+function EditorToy::loadSimulation(%this)
+{
+	EditorToy.autoLoadScene(EditorToy.sceneName);
+	EditorToy.startSimulation();
+}
+
+function EditorToy::startSimulation(%this)
+{
+	EditorToy.setSceneWindowCamera();
 	%scene = %this.activeScene;
+	%scene.setIsEditorScene(0);
 	%count = %scene.getCount();
 	%list = %scene.getSceneObjectList();
 	for(%i = 0; %i < %count; %i++)
@@ -200,19 +227,13 @@ function EditorToy::playScene(%this)
 		%class = %obj.getClassName();
 		%obj.setActive(1);
 	}
+	EditorToy.sceneState = "play";
 }
 
 function EditorToy::pauseScene(%this)
 {
-	%scene = %this.activeScene;
-	%count = %scene.getCount();
-	%list = %scene.getSceneObjectList();
-	for(%i = 0; %i < %count; %i++)
-	{
-		%obj = getWord(%list, %i);
-		%class = %obj.getClassName();
-		%obj.setActive(0);
-	}
+	EditorToy.sceneState = "pause";
+	EditorToy.autoLoadScene(EditorToy.sceneName);
 }
 
 function SceneGravX::update(%this)
