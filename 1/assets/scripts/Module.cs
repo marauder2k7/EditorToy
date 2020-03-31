@@ -83,11 +83,18 @@ function EditorToy::finishModule(%this)
 	if(%mName $= "")
 		return;
 	
+	//Clear behavior set here 
+	//so they do not carry over to other scenes.
+	//also has to be done when loading between
+	//modules
+	BehaviorSet.clear();
+	
 	if(!isDirectory("^EditorToy/projects/"@ %mName @ "/1/"))
 	{
 		createPath("^EditorToy/projects/"@ %mName @ "/1/assets/images/");
 		createPath("^EditorToy/projects/"@ %mName @ "/1/assets/particles/");
 		createPath("^EditorToy/projects/"@ %mName @ "/1/assets/scripts/");
+		createPath("^EditorToy/projects/"@ %mName @ "/1/assets/behaviors/");
 		createPath("^EditorToy/projects/"@ %mName @ "/1/assets/gui/");
 		createPath("^EditorToy/projects/"@ %mName @ "/1/assets/scenes/");
 		createPath("^EditorToy/projects/"@ %mName @ "/1/assets/sounds/");
@@ -151,7 +158,7 @@ function EditorToy::writeModuleTaml(%this)
 	EditorToy.activateSceneBttn();
 	EditorToy.createAssetSims();
 	EditorToy.populateAssetSims();
-	
+	EditorToy.createBehaviors();
 }
 //-----------------------------------------------
 //MODULE LOAD
@@ -190,6 +197,7 @@ function ModuleList::onReturn(%this)
 function EditorToy::loadModule(%this)
 {
 	EditorToy.deleteAssetSims();
+	
 	SandboxScene.clear();
 	//%module = ModuleList.getText();
 	%module = EditorToy.selectedModule;
@@ -199,6 +207,7 @@ function EditorToy::loadModule(%this)
 	AssetDatabase.addModuleDeclaredAssets(%moduleDef);
 	EditorToy.activeModule = %moduleDef;
 	ModuleLoad.setVisible(0);
+	EditorToy.createBehaviors();
 	%this.loadModulePref();
 	EditorToy.activateSceneBttn();
 }
@@ -263,4 +272,20 @@ function EditorToy::populateAssetSims(%this)
 		}
 		
 	}
+}
+
+function EditorToy::createBehaviors(%this)
+{
+	//Great thing about behaviors 
+	//They have their own simset already set :)
+	//BehaviorSet.
+	BehaviorSet.clear();
+	%mName = EditorToy.moduleName;
+	%behaviorsDirectory =  "^EditorToy/projects/"@ %mName @ "/1/assets/behaviors/";
+	// Compile all the cs files.
+   %behaviorsSpec = %behaviorsDirectory @ "*.cs";
+   for (%file = findFirstFile(%behaviorsSpec); %file !$= ""; %file = findNextFile(%behaviorsSpec))
+   {
+      exec(%file);
+   }
 }

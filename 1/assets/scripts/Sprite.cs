@@ -5048,3 +5048,235 @@ function SpriteClass::onLoseFirstResponder(%this)
 	EditorToy.updateSprite();
 }
 
+function EditorToy::updateSpriteBehavior(%this)
+{
+	//%fieldName = Sprite.getBehaviorByIndex(0).getDynamicField()
+	//%template = Sprite.getBehaviorByIndex(0).template;
+	//%tFieldcount
+	//%tField
+	//%fieldValue = Sprite.getBehaviorByIndex(0).getFieldValue(%fieldName)
+	SpriteBehaviorContainer.setExtent(197,70);
+	SpriteBehaviorStack.clear();
+	%obj = EditorToy.selSprite;
+	%bCount = getWordCount( %obj.BehaviorList);
+	if(%bCount == 0)
+		return;
+	for(%i = 0; %i < %bCount; %i++)
+	{
+		%template = getWord(%obj.BehaviorList, %i);
+		//%dCount = %obj.getBehaviorByIndex(%i).getDynamicFieldCount();
+		%dCount = %template.getBehaviorFieldcount();
+		%container = new GuiControl() {
+			position = "0 0";
+			extent = "197 " @ %dCount * 30 + 30;
+			minExtent = "197 " @ %dCount * 30 + 30;
+			horizSizing = "right";
+			vertSizing = "bottom";
+			profile = "GuiDefaultBorderProfile";
+			visible = "1";
+			active = "1";
+			tooltipProfile = "GuiToolTipProfile";
+			hovertime = "1000";
+			isContainer = "1";
+			canSave = "1";
+			canSaveDynamicFields = "0";
+			
+			new GuiTextCtrl() {
+				text = %template;
+				maxLength = "1024";
+				margin = "0 0 0 0";
+				padding = "0 0 0 0";
+				anchorTop = "1";
+				anchorBottom = "0";
+				anchorLeft = "1";
+				anchorRight = "0";
+				position = "10 8";
+				extent = "182 18";
+				minExtent = "8 2";
+				horizSizing = "right";
+				vertSizing = "bottom";
+				profile = "GuiEditorTextProfile";
+				visible = "1";
+				active = "1";
+				tooltipProfile = "GuiToolTipProfile";
+				hovertime = "1000";
+				isContainer = "1";
+				canSave = "1";
+				canSaveDynamicFields = "0";
+			};
+			
+		};
+		
+		for(%n = 0; %n < %dCount; %n++)
+		{
+			%field = %template.getBehaviorField(%n);
+			%fName = getWord(%field,0);
+			%behaviorDynamic = "Behavior" @ %i;
+			%bDynamic = %obj.getFieldValue(%behaviorDynamic);
+			%bdCount = getWordCount(%bDynamic);
+			for(%j = 0; %j < %bdCount; %j++)
+			{
+				%word = getWord(%bDynamic, %j);
+				if(%word $= %fName)
+				{
+					%fValue = getWord(%bDynamic, %j + 1);
+					%fWord = %j + 1;
+					echo(%fValue);
+				}
+			}
+			//%fValue = %obj.getBehaviorByIndex(%i).getFieldValue(%fName);
+			
+			%fContainer = new GuiControl() {
+			position = "0 " @ (%n + 1) * 30;
+			extent = "197 30";
+			horizSizing = "right";
+			vertSizing = "bottom";
+			profile = "GuiDefaultBorderProfile";
+			visible = "1";
+			active = "1";
+			tooltipProfile = "GuiToolTipProfile";
+			hovertime = "1000";
+			isContainer = "1";
+			canSave = "1";
+			canSaveDynamicFields = "0";
+			
+			new GuiTextCtrl() {
+				text = %fName;
+				maxLength = "1024";
+				margin = "0 0 0 0";
+				padding = "0 0 0 0";
+				anchorTop = "1";
+				anchorBottom = "0";
+				anchorLeft = "1";
+				anchorRight = "0";
+				position = "10 8";
+				extent = "88 15";
+				minExtent = "8 2";
+				horizSizing = "right";
+				vertSizing = "bottom";
+				profile = "GuiEditorTextProfile";
+				visible = "1";
+				active = "1";
+				tooltipProfile = "GuiToolTipProfile";
+				hovertime = "1000";
+				isContainer = "1";
+				canSave = "1";
+				canSaveDynamicFields = "0";
+				};
+				
+			new GuiTextEditCtrl() {
+				bId = %behaviorDynamic;
+				word = %fWord;
+				class = "BehaviorField";
+				text = %fValue;
+				historySize = "0";
+				tabComplete = "0";
+				sinkAllKeyEvents = "0";
+				password = "0";
+				passwordMask = "*";
+				maxLength = "1024";
+				margin = "0 0 0 0";
+				padding = "0 0 0 0";
+				anchorTop = "1";
+				anchorBottom = "0";
+				anchorLeft = "1";
+				anchorRight = "0";
+				position = "94 6";
+				extent = "110 18";
+				minExtent = "8 2";
+				horizSizing = "right";
+				vertSizing = "bottom";
+				profile = "GuiEditorTextEditProfile";
+				visible = "1";
+				active = "1";
+				tooltipProfile = "GuiToolTipProfile";
+				hovertime = "1000";
+				isContainer = "1";
+				canSave = "1";
+				canSaveDynamicFields = "0";
+				};
+			};
+			
+			%container.add(%fContainer);
+		}
+		
+		
+		
+		SpriteBehaviorStack.add(%container);
+	}
+	%extent = SpriteBehaviorStack.getExtent();
+	%height = getWord(%extent, 1);
+	%height = %height + 70;
+	SpriteBehaviorContainer.setExtent(197, %height);
+	SpriteBehaviorRollout.sizeToContents();
+}
+
+function SpriteBehaviorList::update(%this)
+{
+	%count = BehaviorSet.getCount();
+	%this.clear();
+	for(%i = 0; %i < %count; %i++)
+	{
+		%this.add(BehaviorSet.getObject(%i).getName(), %i);
+	}
+}
+
+function EditorToy::addSpriteBehavior(%this)
+{
+	%obj = EditorToy.selSprite;
+	%behavior = SpriteBehaviorList.getText();
+	%count = getWordCount( %obj.BehaviorList);
+	for(%i = 0; %i < %count; %i++)
+	{
+		%word = getWord(%obj.BehaviorList, %i);
+		if(%word $= %behavior)
+		{
+			//dont want to add the same behavior twice
+			echo("%---Behavior already bound to this object---%");
+			return;
+		}
+	}
+	%obj.BehaviorList = setWord( %obj.BehaviorList, getWordCount( %obj.BehaviorList), %behavior);
+	EditorToy.createSpriteBehaviorField();
+}
+
+function EditorToy::createSpriteBehaviorField(%this)
+{
+	%obj = EditorToy.selSprite;
+	%count = getWordCount( %obj.BehaviorList );
+	for(%i = 0; %i < %count; %i++)
+	{
+		%behavior = getWord(%obj.BehaviorList, %i);
+		%fieldValue = %behavior;
+		%bCount = %behavior.getBehaviorFieldCount();
+		echo(%bCount);
+		for(%j = 0; %j < %bCount; %j++)
+		{
+			%field = %behavior.getBehaviorField(%j);
+			%fieldName = getWord(%field, 0);
+			%fieldDef = getWord(%field, 2);
+			if(%fieldDef $= "")
+				%fieldDef = "Null";
+			%field = %fieldName SPC %fieldDef;
+			%fieldValue = %fieldValue SPC %field;
+		}
+		%dynField = "Behavior" @ %i;
+		
+		%command = %obj @ "." @ %dynField @ " = \"" @ %fieldValue @ "\";" ;
+		
+        eval(%command);
+	}
+
+	EditorToy.updateSpriteBehavior();
+}
+
+function BehaviorField::onReturn(%this)
+{
+	%obj = EditorToy.selSprite;
+	%behaviorId = %this.bId;
+	%word = %this.word;
+	%value = %this.getText();
+	%field = %obj.getFieldValue(%behaviorId);
+	%fieldUp = setWord(%field, %word, %value);
+	%obj.setFieldValue(%behaviorId,%fieldUp);
+}

@@ -739,7 +739,10 @@ function EditorToy::destroy(%this)
 	%scene = EditorToy.activeScene;
 	if(%scene != "")
 	{
-		EditorToy.saveScene();
+		if(EditorToy.sceneState $= "pause")
+		{
+			EditorToy.saveScene();
+		}
 	}
 	%mName = EditorToy.moduleName;
 	if(%mName !$= "")
@@ -1249,16 +1252,12 @@ function EditorToy::onMiddleMouseDown(%this, %touchID, %worldPosition)
 
 function EditorToy::onMiddleMouseDragged(%this, %touchID, %worldPosition)
 {
-	echo(%touchId @ " touch dragged " @ %worldPosition);
-	
+
 	%windowPosition = SandboxWindow.getWindowPoint(%worldPosition);
 	
 	EditorToy.oldPosition = EditorToy.newPosition;
-	echo("old position" @ EditorToy.oldPosition);
 	
 	EditorToy.newPosition = %windowPosition;
-	
-	echo("new position" @ EditorToy.newPosition);
 	
 	%panOffset = Vector2Sub( EditorToy.newPosition , EditorToy.oldPosition);
 	
@@ -1520,6 +1519,8 @@ function EditorToy::createObjectMenu(%this, %obj)
 		SpriteBlendA.update();
 		SpriteSrcBlendList.update();
 		SpriteDstBlendList.update();
+		EditorToy.updateSpriteBehavior();
+		SpriteBehaviorList.update();
 	}
 	
 	else if(%className $= "CompositeSprite")
@@ -2276,7 +2277,7 @@ function PolyPosY::onLoseFirstResponder(%this)
 }
 
 //We have to convert typed in values to world positions
-//as the gui displays local positions but the gui elements
+//as the gui displays local positions but the poly elements
 //are built in worldspace.
 function EditorToy::changeXtoWorld(%this ,%text, %objId)
 {
@@ -2405,7 +2406,6 @@ function EditorToy::createPolyCollision(%this)
 		%objHeight = %objWidth * %aspect;
 	}
 	
-	
 	%scene = %this.activeScene;
 	PolyEditorWindow.setScene(%scene);
     PolyEditorWindow.setCameraSize( %objWidth , %objHeight );
@@ -2424,15 +2424,16 @@ function EditorToy::createEdgeCollision(%this)
 	%objHeight = %obj.getHeight() * 1.5;
 	%objWidth = %obj.getWidth() * 1.5;
 	%objPos = %obj.getPosition();
-	%aspect = EditorToy.aspectRatio;
-	if(%objWidth < %objHeight)
+		%aspect = EditorToy.polyAspect;
+	if(%objHeight > %objWidth)
 	{
 		%objWidth = %objHeight * %aspect;
 	}
-	if(%objWidth > %objHeight)
+	else
 	{
 		%objHeight = %objWidth * %aspect;
 	}
+	
 	%scene = %this.activeScene;
 	PolyEditorWindow.setScene(%scene);
     PolyEditorWindow.setCameraSize( %objWidth , %objHeight );
@@ -2451,15 +2452,16 @@ function EditorToy::createChainCollision(%this)
 	%objHeight = %obj.getHeight() * 1.5;
 	%objWidth = %obj.getWidth() * 1.5;
 	%objPos = %obj.getPosition();
-	%aspect = EditorToy.aspectRatio;
-	if(%objWidth < %objHeight)
+		%aspect = EditorToy.polyAspect;
+	if(%objHeight > %objWidth)
 	{
 		%objWidth = %objHeight * %aspect;
 	}
-	if(%objWidth > %objHeight)
+	else
 	{
 		%objHeight = %objWidth * %aspect;
 	}
+	
 	%scene = %this.activeScene;
 	PolyEditorWindow.setScene(%scene);
     PolyEditorWindow.setCameraSize( %objWidth , %objHeight );
@@ -2715,27 +2717,6 @@ function EditorToy::deleteObject(%this)
 	EditorToy.selObject.delete();
 }
 
-function LockState::onClick(%this)
-{
-	%obj = EditorToy.selObject;
-	%className = %obj.getClassName();
-	echo("button Clicked");
-	if(%this.getStateOn())
-	{
-		if(%className $= "Sprite")
-		{
-			SpriteScroll.setVisible(0);
-		}
-	}
-	else
-	{
-		if(%className $= "Sprite")
-		{
-			SpriteScroll.setVisible(1);
-		}
-	}
-}
-
 function EditorToy::lockObject(%this)
 {
 	
@@ -2789,4 +2770,22 @@ function EditorToy::lockObject(%this)
 		}
 		
 	}
+}
+
+function isBehaviorField(%this, %behavior, %field)
+{
+	if(isObject(%behavior))
+	{
+		//check dynamic fields of obj 
+		for(%i = 0; %i < %behavior.fieldCount; %i++)  
+		{
+			%newFieldData = %behavior.field[%i];
+			%FieldName = getField(%newFieldData,0);
+			if (%fieldName $= %field) 
+			{
+				return true;
+			}
+		}
+	}
+   return false;
 }

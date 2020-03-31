@@ -186,12 +186,14 @@ function EditorToy::loadScenePref(%this)
 	SceneCameraY.update();
 	EditorToy.setSceneWindowCamera();
 	EditorToy.activeScene.setIsEditorScene(1);
-	
+	//EditorToy.deactivateSceneObjects();
 	%this.updateSceneEdit();
 }
 
 function EditorToy::playScene(%this)
 {
+	if(EditorToy.sceneState $= "play")
+		return;
 	//we have to save the scene first
 	if(isObject (CameraObject))
 	{
@@ -201,11 +203,70 @@ function EditorToy::playScene(%this)
 	{
 		ParticlePlayground.delete();
 	}
+	EditorToy.activateSceneObjects();
+	EditorToy.hideAssetMenus();
+	//we are starting a loop here
+	EditorToy.saveSimulation();
+	
+}
+
+function EditorToy::saveSimulation(%this)
+{
 	%scene = EditorToy.activeScene;
 	%sceneName = %scene.getName();
 	%mName = EditorToy.moduleName;
 	TamlWrite(%scene, "modules/EditorToy/1/projects/"@ %mName @ "/1/assets/scenes/" @ %sceneName @ ".scene.taml" );
 	EditorToy.loadSimulation();
+}
+
+function EditorToy::activateSceneObjects(%this)
+{
+	%scene = %this.activeScene;
+	%count = %scene.getCount();
+	%list = %scene.getSceneObjectList();
+	for(%i = 0; %i < %count; %i++)
+	{
+		%obj = getWord(%list, %i);
+		%obj.setActive(1);
+		for(%j = 0; %j < getWordCount(%obj.BehaviorList); %j++)
+		{
+			%behavior = getWord(%obj.BehaviorList, %j);
+			%bi = %behavior.createInstance();
+			%dCount = %behavior.getBehaviorFieldcount();
+			for(%k = 0; %k < %dCount; %k++)
+			{
+				%field = %behavior.getBehaviorField(%k);
+				%fName = getWord(%field,0);
+				%behaviorDynamic = "Behavior" @ %j;
+				%bDynamic = %obj.getFieldValue(%behaviorDynamic);
+				%bdCount = getWordCount(%bDynamic);
+				for(%l = 0; %l < %bdCount; %l++)
+				{
+					%word = getWord(%bDynamic, %l);
+					if(%word $= %fName)
+					{
+						%fValue = getWord(%bDynamic, %l + 1);
+					}
+					%bi.setFieldValue(%fName, %fValue);
+				}
+			}
+			%obj.addBehavior(%bi);
+		}
+	}
+}
+
+function EditorToy::deactivateSceneObjects(%this)
+{
+	%scene = %this.activeScene;
+	%scene.setIsEditorScene(1);
+	%count = %scene.getCount();
+	%list = %scene.getSceneObjectList();
+	for(%i = 0; %i < %count; %i++)
+	{
+		%obj = getWord(%list, %i);
+		%obj.setActive(0);
+		%obj.clearBehaviors();
+	}
 }
 
 function EditorToy::loadSimulation(%this)
@@ -216,17 +277,10 @@ function EditorToy::loadSimulation(%this)
 
 function EditorToy::startSimulation(%this)
 {
-	EditorToy.setSceneWindowCamera();
-	%scene = %this.activeScene;
+	%scene = EditorToy.activeScene;
+	
 	%scene.setIsEditorScene(0);
-	%count = %scene.getCount();
-	%list = %scene.getSceneObjectList();
-	for(%i = 0; %i < %count; %i++)
-	{
-		%obj = getWord(%list, %i);
-		%class = %obj.getClassName();
-		%obj.setActive(1);
-	}
+	EditorToy.setSceneWindowCamera();
 	EditorToy.sceneState = "play";
 }
 
@@ -234,6 +288,8 @@ function EditorToy::pauseScene(%this)
 {
 	EditorToy.sceneState = "pause";
 	EditorToy.autoLoadScene(EditorToy.sceneName);
+	%scene = %this.activeScene;
+	EditorToy.deactivateSceneObjects();
 }
 
 function SceneGravX::update(%this)

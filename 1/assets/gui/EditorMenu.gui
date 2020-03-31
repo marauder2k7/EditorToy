@@ -13,7 +13,7 @@
    isContainer = "1";
    canSave = "1";
    canSaveDynamicFields = "1";
-      guidesVertical = "0 0";
+      guidesVertical = "0 0 0 0 0 0";
 
    new GuiControl() {
       position = "0 0";
@@ -50,7 +50,7 @@
          active = "1";
          command = "EditorToy.createModule();";
          tooltipProfile = "GuiToolTipProfile";
-         tooltip = "New Scene";
+         tooltip = "Create Module";
          hovertime = "1000";
          isContainer = "0";
          canSave = "1";
@@ -76,7 +76,7 @@
          active = "1";
          command = "EditorToy.loadModuleMenu();";
          tooltipProfile = "GuiToolTipProfile";
-         tooltip = "New Scene";
+         tooltip = "Load Module";
          hovertime = "1000";
          isContainer = "0";
          canSave = "1";
@@ -447,6 +447,32 @@
          canSave = "1";
          canSaveDynamicFields = "0";
       };
+      new GuiBitmapButtonCtrl(CreateEmitterBttn) {
+         bitmap = "^EditorToy/assets/gui/images/EmitterBttn";
+         bitmapMode = "Stretched";
+         autoFitExtents = "0";
+         useModifiers = "0";
+         useStates = "1";
+         masked = "0";
+         groupNum = "-1";
+         buttonType = "PushButton";
+         useMouseEvents = "0";
+         position = "445 2";
+         extent = "29 27";
+         minExtent = "8 2";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         profile = "GuiDefaultProfile";
+         visible = "1";
+         active = "1";
+         command = "EditorToy.createParticlePlayer();";
+         tooltipProfile = "GuiToolTipProfile";
+         tooltip = "Create Particle Player";
+         hovertime = "1000";
+         isContainer = "0";
+         canSave = "1";
+         canSaveDynamicFields = "0";
+      };
       new GuiBitmapButtonCtrl(CreateForceBttn) {
          bitmap = "^EditorToy/assets/gui/images/PointforceBttn";
          bitmapMode = "Stretched";
@@ -457,7 +483,7 @@
          groupNum = "-1";
          buttonType = "PushButton";
          useMouseEvents = "0";
-         position = "441 2";
+         position = "473 2";
          extent = "29 27";
          minExtent = "8 2";
          horizSizing = "right";
@@ -482,7 +508,7 @@
          groupNum = "-1";
          buttonType = "PushButton";
          useMouseEvents = "0";
-         position = "471 2";
+         position = "503 2";
          extent = "29 27";
          minExtent = "8 2";
          horizSizing = "right";
@@ -507,7 +533,7 @@
          groupNum = "-1";
          buttonType = "PushButton";
          useMouseEvents = "0";
-         position = "501 2";
+         position = "533 2";
          extent = "29 27";
          minExtent = "8 2";
          horizSizing = "right";
@@ -532,7 +558,7 @@
          groupNum = "-1";
          buttonType = "PushButton";
          useMouseEvents = "0";
-         position = "531 2";
+         position = "563 2";
          extent = "29 27";
          minExtent = "8 2";
          horizSizing = "right";
@@ -551,7 +577,7 @@
          bitmap = "^EditorToy/assets/gui/images/separator-h.png";
          color = "255 255 255 255";
          wrap = "0";
-         position = "562 0";
+         position = "594 0";
          extent = "2 30";
          minExtent = "2 2";
          horizSizing = "right";
@@ -572,10 +598,10 @@
          useModifiers = "0";
          useStates = "1";
          masked = "0";
-         groupNum = "-1";
-         buttonType = "PushButton";
+         groupNum = "1";
+         buttonType = "RadioButton";
          useMouseEvents = "0";
-         position = "579 8";
+         position = "611 8";
          extent = "16 16";
          minExtent = "8 2";
          horizSizing = "right";
@@ -598,10 +624,10 @@
          useModifiers = "0";
          useStates = "1";
          masked = "0";
-         groupNum = "-1";
-         buttonType = "PushButton";
+         groupNum = "1";
+         buttonType = "RadioButton";
          useMouseEvents = "0";
-         position = "595 8";
+         position = "627 8";
          extent = "16 16";
          minExtent = "8 2";
          horizSizing = "right";
@@ -627,7 +653,7 @@
          groupNum = "-1";
          buttonType = "PushButton";
          useMouseEvents = "0";
-         position = "611 8";
+         position = "643 8";
          extent = "16 16";
          minExtent = "8 2";
          horizSizing = "right";
@@ -10028,7 +10054,7 @@
                changeChildSizeToFit = "1";
                changeChildPosition = "1";
                position = "1 1";
-               extent = "197 2022";
+               extent = "197 2214";
                minExtent = "16 16";
                horizSizing = "width";
                vertSizing = "bottom";
@@ -10070,11 +10096,12 @@
                      horizSizing = "right";
                      vertSizing = "bottom";
                      profile = "GuiDefaultProfile";
-                     visible = "1";
+                     visible = "0";
                      active = "1";
                      tooltipProfile = "GuiToolTipProfile";
                      hovertime = "1000";
                      isContainer = "1";
+                     hidden = "1";
                      canSave = "1";
                      canSaveDynamicFields = "0";
 
@@ -11165,6 +11192,144 @@
                      };
                   };
                };
+               new GuiRolloutCtrl(SpriteBehaviorRollout) {
+                  caption = "Behaviors";
+                  margin = "0 0 0 0";
+                  defaultHeight = "40";
+                  expanded = "1";
+                  clickCollapse = "1";
+                  hideHeader = "0";
+                  autoCollapseSiblings = "0";
+                  position = "0 420";
+                  extent = "197 190";
+                  minExtent = "8 2";
+                  horizSizing = "right";
+                  vertSizing = "bottom";
+                  profile = "GuiEditorRolloutProfile";
+                  visible = "1";
+                  active = "1";
+                  tooltipProfile = "GuiToolTipProfile";
+                  hovertime = "1000";
+                  isContainer = "1";
+                  canSave = "1";
+                  canSaveDynamicFields = "0";
+
+                  new GuiControl(SpriteBehaviorContainer) {
+                     position = "0 24";
+                     extent = "197 166";
+                     minExtent = "197 70";
+                     horizSizing = "right";
+                     vertSizing = "bottom";
+                     profile = "GuiDefaultProfile";
+                     visible = "1";
+                     active = "1";
+                     tooltipProfile = "GuiToolTipProfile";
+                     hovertime = "1000";
+                     isContainer = "1";
+                     canSave = "1";
+                     canSaveDynamicFields = "0";
+
+                     new GuiTextCtrl() {
+                        text = "Behavior";
+                        maxLength = "1024";
+                        margin = "0 0 0 0";
+                        padding = "0 0 0 0";
+                        anchorTop = "1";
+                        anchorBottom = "0";
+                        anchorLeft = "1";
+                        anchorRight = "0";
+                        position = "10 8";
+                        extent = "89 15";
+                        minExtent = "8 2";
+                        horizSizing = "right";
+                        vertSizing = "bottom";
+                        profile = "GuiEditorTextProfile";
+                        visible = "1";
+                        active = "1";
+                        tooltipProfile = "GuiToolTipProfile";
+                        hovertime = "1000";
+                        isContainer = "1";
+                        canSave = "1";
+                        canSaveDynamicFields = "0";
+                     };
+                     new GuiBitmapButtonCtrl() {
+                        bitmap = "^EditorToy/assets/gui/images/AddBttn";
+                        bitmapMode = "Stretched";
+                        autoFitExtents = "0";
+                        useModifiers = "0";
+                        useStates = "1";
+                        masked = "0";
+                        groupNum = "-1";
+                        buttonType = "PushButton";
+                        useMouseEvents = "0";
+                        position = "164 3";
+                        extent = "24 24";
+                        minExtent = "8 2";
+                        horizSizing = "right";
+                        vertSizing = "bottom";
+                        profile = "GuiDefaultProfile";
+                        visible = "1";
+                        active = "1";
+                        command = "EditorToy.addSpriteBehavior();";
+                        tooltipProfile = "GuiToolTipProfile";
+                        hovertime = "1000";
+                        isContainer = "0";
+                        canSave = "1";
+                        canSaveDynamicFields = "0";
+                     };
+                     new GuiPopUpMenuCtrl(SpriteBehaviorList) {
+                        maxPopupHeight = "200";
+                        sbUsesNAColor = "0";
+                        reverseTextList = "0";
+                        bitmapBounds = "16 16";
+                        maxLength = "1024";
+                        margin = "0 0 0 0";
+                        padding = "0 0 0 0";
+                        anchorTop = "1";
+                        anchorBottom = "0";
+                        anchorLeft = "1";
+                        anchorRight = "0";
+                        position = "10 30";
+                        extent = "177 20";
+                        minExtent = "8 2";
+                        horizSizing = "right";
+                        vertSizing = "bottom";
+                        profile = "GuiPopUpMenuProfile";
+                        visible = "1";
+                        active = "1";
+                        command = "SpriteBodyList.onReturn();";
+                        tooltipProfile = "GuiToolTipProfile";
+                        hovertime = "1000";
+                        isContainer = "1";
+                        canSave = "1";
+                        canSaveDynamicFields = "0";
+                     };
+                     new GuiStackControl(SpriteBehaviorStack) {
+                        stackingType = "Vertical";
+                        horizStacking = "Left to Right";
+                        vertStacking = "Top to Bottom";
+                        padding = "5";
+                        dynamicSize = "1";
+                        dynamicNonStackExtent = "0";
+                        dynamicPos = "0";
+                        changeChildSizeToFit = "1";
+                        changeChildPosition = "1";
+                        position = "0 60";
+                        extent = "197 64";
+                        minExtent = "197 2";
+                        horizSizing = "right";
+                        vertSizing = "bottom";
+                        profile = "GuiDefaultProfile";
+                        visible = "1";
+                        active = "1";
+                        tooltipProfile = "GuiToolTipProfile";
+                        hovertime = "1000";
+                        isContainer = "1";
+                        canSave = "1";
+                        canSaveDynamicFields = "0";
+                     };
+                  };
+               };
                new GuiRolloutCtrl() {
                   caption = "Physics Properties";
                   margin = "0 0 0 0";
@@ -11173,7 +11338,7 @@
                   clickCollapse = "1";
                   hideHeader = "0";
                   autoCollapseSiblings = "0";
-                  position = "0 420";
+                  position = "0 612";
                   extent = "197 480";
                   minExtent = "8 2";
                   horizSizing = "right";
@@ -12419,7 +12584,7 @@
                   clickCollapse = "1";
                   hideHeader = "0";
                   autoCollapseSiblings = "0";
-                  position = "0 902";
+                  position = "0 1094";
                   extent = "197 436";
                   minExtent = "8 2";
                   horizSizing = "right";
@@ -12440,12 +12605,11 @@
                      horizSizing = "right";
                      vertSizing = "bottom";
                      profile = "GuiDefaultProfile";
-                     visible = "0";
+                     visible = "1";
                      active = "1";
                      tooltipProfile = "GuiToolTipProfile";
                      hovertime = "1000";
                      isContainer = "1";
-                     hidden = "1";
                      canSave = "1";
                      canSaveDynamicFields = "0";
 
@@ -13951,7 +14115,7 @@
                   clickCollapse = "1";
                   hideHeader = "0";
                   autoCollapseSiblings = "0";
-                  position = "0 1340";
+                  position = "0 1532";
                   extent = "197 275";
                   minExtent = "8 2";
                   horizSizing = "right";
@@ -13972,12 +14136,11 @@
                      horizSizing = "right";
                      vertSizing = "bottom";
                      profile = "GuiDefaultProfile";
-                     visible = "0";
+                     visible = "1";
                      active = "1";
                      tooltipProfile = "GuiToolTipProfile";
                      hovertime = "1000";
                      isContainer = "1";
-                     hidden = "1";
                      canSave = "1";
                      canSaveDynamicFields = "0";
 
@@ -14096,7 +14259,7 @@
                   clickCollapse = "1";
                   hideHeader = "0";
                   autoCollapseSiblings = "0";
-                  position = "0 1617";
+                  position = "0 1809";
                   extent = "197 405";
                   minExtent = "8 2";
                   horizSizing = "right";
@@ -14540,6 +14703,7 @@
          tooltipProfile = "GuiToolTipProfile";
          hovertime = "1000";
          isContainer = "1";
+         hidden = "1";
          canSave = "1";
          canSaveDynamicFields = "0";
 
@@ -21462,6 +21626,7 @@
          tooltipProfile = "GuiToolTipProfile";
          hovertime = "1000";
          isContainer = "1";
+         hidden = "1";
          canSave = "1";
          canSaveDynamicFields = "0";
 
@@ -21688,7 +21853,7 @@
             profile = "BlueButtonProfile";
             visible = "1";
             active = "1";
-			command = "CameraPopout.toggleVisible();";
+            command = "CameraPopout.toggleVisible();";
             tooltipProfile = "GuiToolTipProfile";
             hovertime = "1000";
             isContainer = "0";
