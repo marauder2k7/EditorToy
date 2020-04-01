@@ -245,7 +245,7 @@ function EditorToy::activateSceneObjects(%this)
 					%word = getWord(%bDynamic, %l);
 					if(%word $= %fName)
 					{
-						%fValue = getWord(%bDynamic, %l + 1);
+						%fValue = getField(%bDynamic, %l + 1);
 					}
 					%bi.setFieldValue(%fName, %fValue);
 				}

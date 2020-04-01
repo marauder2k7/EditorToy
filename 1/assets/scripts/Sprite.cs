@@ -5110,7 +5110,9 @@ function EditorToy::updateSpriteBehavior(%this)
 		for(%n = 0; %n < %dCount; %n++)
 		{
 			%field = %template.getBehaviorField(%n);
+			%fDesc = %template.getBehaviorFieldDescription(%n);
 			%fName = getWord(%field,0);
+			%fType = getField(%field,1);
 			%behaviorDynamic = "Behavior" @ %i;
 			%bDynamic = %obj.getFieldValue(%behaviorDynamic);
 			%bdCount = getWordCount(%bDynamic);
@@ -5119,12 +5121,10 @@ function EditorToy::updateSpriteBehavior(%this)
 				%word = getWord(%bDynamic, %j);
 				if(%word $= %fName)
 				{
-					%fValue = getWord(%bDynamic, %j + 1);
+					%fValue = getField(%bDynamic, %j + 1);
 					%fWord = %j + 1;
-					echo(%fValue);
 				}
 			}
-			//%fValue = %obj.getBehaviorByIndex(%i).getFieldValue(%fName);
 			
 			%fContainer = new GuiControl() {
 			position = "0 " @ (%n + 1) * 30;
@@ -5140,69 +5140,154 @@ function EditorToy::updateSpriteBehavior(%this)
 			canSave = "1";
 			canSaveDynamicFields = "0";
 			
-			new GuiTextCtrl() {
-				text = %fName;
-				maxLength = "1024";
-				margin = "0 0 0 0";
-				padding = "0 0 0 0";
-				anchorTop = "1";
-				anchorBottom = "0";
-				anchorLeft = "1";
-				anchorRight = "0";
-				position = "10 8";
-				extent = "88 15";
-				minExtent = "8 2";
-				horizSizing = "right";
-				vertSizing = "bottom";
-				profile = "GuiEditorTextProfile";
-				visible = "1";
-				active = "1";
-				tooltipProfile = "GuiToolTipProfile";
-				hovertime = "1000";
-				isContainer = "1";
-				canSave = "1";
-				canSaveDynamicFields = "0";
-				};
-				
-			new GuiTextEditCtrl() {
-				bId = %behaviorDynamic;
-				word = %fWord;
-				class = "BehaviorField";
-				text = %fValue;
-				historySize = "0";
-				tabComplete = "0";
-				sinkAllKeyEvents = "0";
-				password = "0";
-				passwordMask = "*";
-				maxLength = "1024";
-				margin = "0 0 0 0";
-				padding = "0 0 0 0";
-				anchorTop = "1";
-				anchorBottom = "0";
-				anchorLeft = "1";
-				anchorRight = "0";
-				position = "94 6";
-				extent = "110 18";
-				minExtent = "8 2";
-				horizSizing = "right";
-				vertSizing = "bottom";
-				profile = "GuiEditorTextEditProfile";
-				visible = "1";
-				active = "1";
-				tooltipProfile = "GuiToolTipProfile";
-				hovertime = "1000";
-				isContainer = "1";
-				canSave = "1";
-				canSaveDynamicFields = "0";
+				new GuiTextCtrl() {
+					text = %fName;
+					maxLength = "1024";
+					margin = "0 0 0 0";
+					padding = "0 0 0 0";
+					anchorTop = "1";
+					anchorBottom = "0";
+					anchorLeft = "1";
+					anchorRight = "0";
+					position = "10 8";
+					extent = "88 15";
+					minExtent = "8 2";
+					horizSizing = "right";
+					vertSizing = "bottom";
+					profile = "GuiEditorTextProfile";
+					visible = "1";
+					active = "1";
+					tooltip = %fDesc;
+					tooltipProfile = "GuiToolTipProfile";
+					hovertime = "1000";
+					isContainer = "1";
+					canSave = "1";
+					canSaveDynamicFields = "0";
 				};
 			};
-			
+					
+			if(%fType $= "int")
+			{
+				%gProfile = "GuiEditorTextEditNumProfile";
+				%edit = new GuiTextEditCtrl() {
+					bId = %behaviorDynamic;
+					word = %fWord;
+					class = "BehaviorField";
+					text = %fValue;
+					historySize = "0";
+					tabComplete = "0";
+					sinkAllKeyEvents = "0";
+					password = "0";
+					passwordMask = "*";
+					maxLength = "1024";
+					margin = "0 0 0 0";
+					padding = "0 0 0 0";
+					anchorTop = "1";
+					anchorBottom = "0";
+					anchorLeft = "1";
+					anchorRight = "0";
+					position = "94 6";
+					extent = "100 18";
+					minExtent = "8 2";
+					horizSizing = "right";
+					vertSizing = "bottom";
+					profile = %gProfile;
+					visible = "1";
+					active = "1";
+					tooltipProfile = "GuiToolTipProfile";
+					hovertime = "1000";
+					isContainer = "1";
+					canSave = "1";
+					canSaveDynamicFields = "0";
+				};
+				%fContainer.add(%edit);
+			}
+			else if(%fType $= "float" || %fType $= "keybind" || %fType $= "object")
+			{
+				%gProfile = "GuiEditorTextEditProfile";
+				%edit = new GuiTextEditCtrl() {
+					bId = %behaviorDynamic;
+					word = %fWord;
+					class = "BehaviorField";
+					text = %fValue;
+					historySize = "0";
+					tabComplete = "0";
+					sinkAllKeyEvents = "0";
+					password = "0";
+					passwordMask = "*";
+					maxLength = "1024";
+					margin = "0 0 0 0";
+					padding = "0 0 0 0";
+					anchorTop = "1";
+					anchorBottom = "0";
+					anchorLeft = "1";
+					anchorRight = "0";
+					position = "94 6";
+					extent = "100 18";
+					minExtent = "8 2";
+					horizSizing = "right";
+					vertSizing = "bottom";
+					profile = %gProfile;
+					visible = "1";
+					active = "1";
+					tooltipProfile = "GuiToolTipProfile";
+					hovertime = "1000";
+					isContainer = "1";
+					canSave = "1";
+					canSaveDynamicFields = "0";
+					};
+				%fContainer.add(%edit);
+			}
+			else if
+			(%fType $= "enum")
+			{
+				%pop = new GuiPopUpMenuCtrl() {
+					maxPopupHeight = "200";
+					sbUsesNAColor = "0";
+					bId = %behaviorDynamic;
+					word = %fWord;
+					class = "BehaviorFieldList";
+					reverseTextList = "0";
+					bitmapBounds = "16 16";
+					maxLength = "1024";
+					margin = "0 0 0 0";
+					padding = "0 0 0 0";
+					anchorTop = "1";
+					anchorBottom = "0";
+					anchorLeft = "1";
+					anchorRight = "0";
+					position = "94 6";
+					extent = "100 20";
+					minExtent = "8 2";
+					horizSizing = "right";
+					vertSizing = "bottom";
+					profile = "GuiPopUpMenuProfile";
+					visible = "1";
+					active = "1";
+					tooltipProfile = "GuiToolTipProfile";
+					hovertime = "1000";
+					isContainer = "1";
+					canSave = "1";
+					canSaveDynamicFields = "0";
+				};
+						
+				%fEnums = %template.getBehaviorFieldUserData(%n);
+				%fEcount = getWordCount(%fEnums);
+				for(%k = 0; %k < %fEcount; %k++)
+				{
+					%enumField = getField(%fEnums,%k);
+					echo(%enumField);
+					%pop.add(%enumField ,%k);
+				}
+				%value = %pop.findText(%fValue);
+				%pop.setSelected(%value);
+				echo("pop added");
+				%fContainer.add(%pop);
+				
+			}	
 			%container.add(%fContainer);
+			SpriteBehaviorStack.add(%container);
 		}
-		
-		
-		
-		SpriteBehaviorStack.add(%container);
 	}
 	%extent = SpriteBehaviorStack.getExtent();
 	%height = getWord(%extent, 1);
@@ -5257,8 +5342,8 @@ function EditorToy::createSpriteBehaviorField(%this)
 			%fieldDef = getWord(%field, 2);
 			if(%fieldDef $= "")
 				%fieldDef = "Null";
-			%field = %fieldName SPC %fieldDef;
-			%fieldValue = %fieldValue SPC %field;
+			%field = %fieldName TAB %fieldDef;
+			%fieldValue = %fieldValue TAB %field;
 		}
 		%dynField = "Behavior" @ %i;
 		
@@ -5277,6 +5362,17 @@ function BehaviorField::onReturn(%this)
 	%word = %this.word;
 	%value = %this.getText();
 	%field = %obj.getFieldValue(%behaviorId);
-	%fieldUp = setWord(%field, %word, %value);
+	%fieldUp = setField(%field, %word, %value);
+	%obj.setFieldValue(%behaviorId,%fieldUp);
+}
+
+function BehaviorFieldList::onSelect(%this)
+{
+	%obj = EditorToy.selSprite;
+	%behaviorId = %this.bId;
+	%word = %this.word;
+	%value = %this.getText();
+	%field = %obj.getFieldValue(%behaviorId);
+	%fieldUp = setField(%field, %word, %value);
 	%obj.setFieldValue(%behaviorId,%fieldUp);
 }
