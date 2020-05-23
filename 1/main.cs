@@ -1363,6 +1363,7 @@ function EditorToy::createCompSpriteSpriteMenu(%this)
 function EditorToy::createObjectMenu(%this, %obj)
 {
 	//get the class name eg. sprite, compositiesprite, scroller.
+	%this.checkLocked(%obj);
 	if(%obj != "")
 	{
 		%className = %obj.getClassName();
@@ -1660,6 +1661,8 @@ function EditorToy::createObjectMenu(%this, %obj)
 		CompSpriteBlendA.update();
 		CompSpriteSrcBlendList.update();
 		CompSpriteDstBlendList.update();
+		EditorToy.updateCompSpriteBehavior();
+		CompSpriteBehaviorList.update();
 	}
 	
 	else if(%className $= "Scroller")
@@ -1785,6 +1788,8 @@ function EditorToy::createObjectMenu(%this, %obj)
 		ScrollerBlendA.update();
 		ScrollerSrcBlendList.update();
 		ScrollerDstBlendList.update();
+		EditorToy.updateScrollerBehavior();
+		ScrollerBehaviorList.update();
 	}
 
 	if(%className $= "ParticlePlayer")
@@ -1918,15 +1923,19 @@ function EditorToy::createObjectMenu(%this, %obj)
 		ParticlePlayerBlendA.update();
 		ParticlePlayerSrcBlendList.update();
 		ParticlePlayerDstBlendList.update();
+		EditorToy.updateParticlePlayerBehavior();
+		ParticlePlayerBehaviorList.update();
 	}
 
 
 }
+
 function EditorToy::activateModuleLoadBttn(%this)
 {
 	ModuleLoadBttn.setActive(1);
 	
 }
+
 function EditorToy::activateSceneBttn(%this)
 {
 	NewSceneBttn.setActive(1);
@@ -2081,7 +2090,6 @@ function flee(%target, %pos, %maxVelocity, %currentVel)
 
 //-----------------------------------------------------------------------------
 //Create Poly Editor
-
 function EditorToy::updatePolylistMenuItems(%this)
 {
 	//PolyList Layout
@@ -2772,20 +2780,53 @@ function EditorToy::lockObject(%this)
 	}
 }
 
-function isBehaviorField(%this, %behavior, %field)
+function EditorToy::checkLocked(%this, %obj)
 {
-	if(isObject(%behavior))
+	%className = %obj.getClassName();
+	if(%obj.locked == 0)
 	{
-		//check dynamic fields of obj 
-		for(%i = 0; %i < %behavior.fieldCount; %i++)  
+		if(%className $= "CompositeSprite")
 		{
-			%newFieldData = %behavior.field[%i];
-			%FieldName = getField(%newFieldData,0);
-			if (%fieldName $= %field) 
-			{
-				return true;
-			}
+			CompSpriteScroll.setVisible(1);
 		}
+		
+		if(%className $= "Sprite")
+		{
+			SpriteScroll.setVisible(1);
+		}
+		
+		if(%className $= "Scroller")
+		{
+			ScrollerScroll.setVisible(1);
+		}
+		
+		if(%className $= "ParticlePlayer")
+		{
+			ParticlePlayerScroll.setVisible(1);
+		}
+		
 	}
-   return false;
+	else
+	{
+		if(%className $= "CompositeSprite")
+		{
+			CompSpriteScroll.setVisible(0);
+		}
+		
+		if(%className $= "Sprite")
+		{
+			SpriteScroll.setVisible(0);
+		}
+		
+		if(%className $= "Scroller")
+		{
+			ScrollerScroll.setVisible(0);
+		}
+		
+		if(%className $= "ParticlePlayer")
+		{
+			ParticlePlayerScroll.setVisible(0);
+		}
+		
+	}
 }

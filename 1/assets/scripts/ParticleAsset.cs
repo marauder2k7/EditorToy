@@ -3,12 +3,17 @@ function EditorToy::createParticleAsset(%this)
 	%this.createDataKeySim();
 	%scene = EditorToy.activeScene;
 	%effect = new ParticleAsset(DefaultParticleAsset);
+	echo("%---Dump for asset---%");
+	%effect.dump();
 	%effect.AssetName = "Default";
 	%emitter = %effect.createEmitter();
 	%emitter.EmitterName = "DefaultEmitter 0";
 	%emitter.Image = "EditorToy:Blocks";
+
 	ParticleAssetSettings.setVisible(1);
 	ParticleAssetMenu.setVisible(1);
+	//Clear the emitter book on start
+	PEmitterBook.clear();
 	EditorToy.addEmitterPage(0);
 	
 	%assetId = AssetDatabase.addPrivateAsset(%effect);
@@ -17,6 +22,7 @@ function EditorToy::createParticleAsset(%this)
 	%player.Particle = %assetId;
 	%player.setActive(0);
 	%player.setPickingAllowed(0);
+	%player.Position = SandboxWindow.getCameraPosition();
 	%scene.add(%player);
 	PAssetName.update();
 	PAssetLifemode.update();
@@ -50,10 +56,14 @@ function EditorToy::saveParticleAsset(%this)
 	%lMode = EditorToy.particleLifeMode;
 	ParticlePlayground.setPaused(1);
 	DefaultParticleAsset.setLifeMode(%lMode);
-	TamlWrite(DefaultParticleAsset,"modules/EditorToy/1/projects/"@ %mName @ "/1/assets/particles/" @ %pName @ ".asset.taml");
+	%asset = DefaultParticleAsset;
+	%asset.setName(%pName);
+	TamlWrite(%pName,"modules/EditorToy/1/projects/"@ %mName @ "/1/assets/particles/" @ %pName @ ".asset.taml");
 	PEmitterBook.clear();
 	ParticleAssetSettings.setVisible(0);
 	ParticleAssetMenu.setVisible(0);
+	%pName.delete();
+	ParticlePlayground.delete();
 	%this.updateParticleAssetFile();
 }
 
@@ -70,7 +80,6 @@ function EditorToy::updateParticleAssetFile(%this)
 {
 	%mName = EditorToy.moduleName;
 	%pName = EditorToy.particleAssetName;
-	%lMode = EditorToy.particleLifeMode;
 	//Because the particle asset is created as a private asset it is given 
 	//a random name from the AssetDatabase. We need to open the file and 
 	//rewrite the third line to the name set by the user
@@ -80,9 +89,6 @@ function EditorToy::updateParticleAssetFile(%this)
 	%file.readLine();
 	%file.writeLine("	AssetName=\"" @ %pName @ "\" ");
 	%file.close();
-	
-	DefaultParticleAsset.delete();
-	ParticlePlayground.delete();
 	
 	%assetFile = "^EditorToy/projects/"@ %mName @ "/1/assets/particles/" @ %pName @ ".asset.taml";
 	

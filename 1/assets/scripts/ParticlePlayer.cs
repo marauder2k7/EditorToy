@@ -1,6 +1,5 @@
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //ParticlePlayer functions 
 function ParticlePlayerLockBttn::update(%this)
 {
@@ -13,16 +12,16 @@ function ParticlePlayerLockBttn::update(%this)
 	%this.setStateOn(%value);
 }
 
-function EditorToy::createParticlePlayer(%this, %assetFile)
+function EditorToy::createParticlePlayer(%this)
 {
 
 	//Spawn particlePlayers at camera position
+	echo("particle player created");
 	%scene = EditorToy.activeScene;
 	%pos = SandboxWindow.getCameraPosition();
 	%asset = ParticleSim.getObject(0).getName();
 	%mName = EditorToy.moduleName;
 	%size = EditorToy.sceneObjectX SPC EditorToy.sceneObjectY;
-	%particlePlayerBase = %assetFile;
 	// Create the particlePlayer.
     %object = new ParticlePlayer();
     %object.Size = %size;
@@ -87,6 +86,7 @@ function EditorToy::updateParticlePlayer(%this)
 	//set data to selected particlePlayer
 	%obj.setName(%name);
 	%obj.class = %class;
+	%obj.setParticleAsset(%asset);
 	%obj.setPosition(%pos);
 	%obj.setSize(%size);
 	%obj.setBodyType(%body);
@@ -5239,7 +5239,6 @@ function ParticlePlayerCollOneWay::onReturn(%this)
 	EditorToy.updateParticlePlayer();
 }
 
-
 //ParticlePlayer Name
 function ParticlePlayerName::onAdd(%this)
 {
@@ -5294,3 +5293,326 @@ function ParticlePlayerClass::onLoseFirstResponder(%this)
 	EditorToy.updateParticlePlayer();
 }
 
+function EditorToy::updateParticlePlayerBehavior(%this)
+{
+
+	ParticlePlayerBehaviorContainer.setExtent(197,70);
+	ParticlePlayerBehaviorStack.clear();
+	%obj = EditorToy.selParticlePlayer;
+	%bCount = getWordCount( %obj.BehaviorList);
+	if(%bCount == 0)
+		return;
+	for(%i = 0; %i < %bCount; %i++)
+	{
+		%template = getWord(%obj.BehaviorList, %i);
+		%dCount = %template.getBehaviorFieldcount();
+		%container = new GuiControl() {
+			position = "0 0";
+			extent = "197 " @ %dCount * 30 + 30;
+			minExtent = "197 " @ %dCount * 30 + 30;
+			horizSizing = "right";
+			vertSizing = "bottom";
+			profile = "GuiDefaultBorderProfile";
+			visible = "1";
+			active = "1";
+			tooltipProfile = "GuiToolTipProfile";
+			hovertime = "1000";
+			isContainer = "1";
+			canSave = "1";
+			canSaveDynamicFields = "0";
+			
+			new GuiTextCtrl() {
+				text = %template;
+				maxLength = "1024";
+				margin = "0 0 0 0";
+				padding = "0 0 0 0";
+				anchorTop = "1";
+				anchorBottom = "0";
+				anchorLeft = "1";
+				anchorRight = "0";
+				position = "10 8";
+				extent = "182 18";
+				minExtent = "8 2";
+				horizSizing = "right";
+				vertSizing = "bottom";
+				profile = "GuiEditorTextProfile";
+				visible = "1";
+				active = "1";
+				tooltipProfile = "GuiToolTipProfile";
+				hovertime = "1000";
+				isContainer = "1";
+				canSave = "1";
+				canSaveDynamicFields = "0";
+			};
+			
+		};
+		
+		for(%n = 0; %n < %dCount; %n++)
+		{
+			%field = %template.getBehaviorField(%n);
+			%fDesc = %template.getBehaviorFieldDescription(%n);
+			%fName = getWord(%field,0);
+			%fType = getField(%field,1);
+			%behaviorDynamic = "Behavior" @ %i;
+			%bDynamic = %obj.getFieldValue(%behaviorDynamic);
+			%bdCount = getWordCount(%bDynamic);
+			for(%j = 0; %j < %bdCount; %j++)
+			{
+				%word = getWord(%bDynamic, %j);
+				if(%word $= %fName)
+				{
+					%fValue = getField(%bDynamic, %j + 1);
+					%fWord = %j + 1;
+				}
+			}
+			
+			%fContainer = new GuiControl() {
+			position = "0 " @ (%n + 1) * 30;
+			extent = "197 30";
+			horizSizing = "right";
+			vertSizing = "bottom";
+			profile = "GuiDefaultBorderProfile";
+			visible = "1";
+			active = "1";
+			tooltipProfile = "GuiToolTipProfile";
+			hovertime = "1000";
+			isContainer = "1";
+			canSave = "1";
+			canSaveDynamicFields = "0";
+			
+				new GuiTextCtrl() {
+					text = %fName;
+					maxLength = "1024";
+					margin = "0 0 0 0";
+					padding = "0 0 0 0";
+					anchorTop = "1";
+					anchorBottom = "0";
+					anchorLeft = "1";
+					anchorRight = "0";
+					position = "10 8";
+					extent = "88 15";
+					minExtent = "8 2";
+					horizSizing = "right";
+					vertSizing = "bottom";
+					profile = "GuiEditorTextProfile";
+					visible = "1";
+					active = "1";
+					tooltip = %fDesc;
+					tooltipProfile = "GuiToolTipProfile";
+					hovertime = "1000";
+					isContainer = "1";
+					canSave = "1";
+					canSaveDynamicFields = "0";
+				};
+			};
+					
+			if(%fType $= "int")
+			{
+				%gProfile = "GuiEditorTextEditNumProfile";
+				%edit = new GuiTextEditCtrl() {
+					bId = %behaviorDynamic;
+					word = %fWord;
+					class = "ParticlePlayerBehaviorField";
+					text = %fValue;
+					historySize = "0";
+					tabComplete = "0";
+					sinkAllKeyEvents = "0";
+					password = "0";
+					passwordMask = "*";
+					maxLength = "1024";
+					margin = "0 0 0 0";
+					padding = "0 0 0 0";
+					anchorTop = "1";
+					anchorBottom = "0";
+					anchorLeft = "1";
+					anchorRight = "0";
+					position = "94 6";
+					extent = "100 18";
+					minExtent = "8 2";
+					horizSizing = "right";
+					vertSizing = "bottom";
+					profile = %gProfile;
+					visible = "1";
+					active = "1";
+					tooltipProfile = "GuiToolTipProfile";
+					hovertime = "1000";
+					isContainer = "1";
+					canSave = "1";
+					canSaveDynamicFields = "0";
+				};
+				%fContainer.add(%edit);
+			}
+			else if(%fType $= "float" || %fType $= "keybind" || %fType $= "object")
+			{
+				%gProfile = "GuiEditorTextEditProfile";
+				%edit = new GuiTextEditCtrl() {
+					bId = %behaviorDynamic;
+					word = %fWord;
+					class = "ParticlePlayerBehaviorField";
+					text = %fValue;
+					historySize = "0";
+					tabComplete = "0";
+					sinkAllKeyEvents = "0";
+					password = "0";
+					passwordMask = "*";
+					maxLength = "1024";
+					margin = "0 0 0 0";
+					padding = "0 0 0 0";
+					anchorTop = "1";
+					anchorBottom = "0";
+					anchorLeft = "1";
+					anchorRight = "0";
+					position = "94 6";
+					extent = "100 18";
+					minExtent = "8 2";
+					horizSizing = "right";
+					vertSizing = "bottom";
+					profile = %gProfile;
+					visible = "1";
+					active = "1";
+					tooltipProfile = "GuiToolTipProfile";
+					hovertime = "1000";
+					isContainer = "1";
+					canSave = "1";
+					canSaveDynamicFields = "0";
+					};
+				%fContainer.add(%edit);
+			}
+			else if
+			(%fType $= "enum")
+			{
+				%pop = new GuiPopUpMenuCtrl() {
+					maxPopupHeight = "200";
+					sbUsesNAColor = "0";
+					bId = %behaviorDynamic;
+					word = %fWord;
+					class = "ParticlePlayerBehaviorFieldList";
+					reverseTextList = "0";
+					bitmapBounds = "16 16";
+					maxLength = "1024";
+					margin = "0 0 0 0";
+					padding = "0 0 0 0";
+					anchorTop = "1";
+					anchorBottom = "0";
+					anchorLeft = "1";
+					anchorRight = "0";
+					position = "94 6";
+					extent = "100 20";
+					minExtent = "8 2";
+					horizSizing = "right";
+					vertSizing = "bottom";
+					profile = "GuiPopUpMenuProfile";
+					visible = "1";
+					active = "1";
+					tooltipProfile = "GuiToolTipProfile";
+					hovertime = "1000";
+					isContainer = "1";
+					canSave = "1";
+					canSaveDynamicFields = "0";
+				};
+						
+				%fEnums = %template.getBehaviorFieldUserData(%n);
+				%fEcount = getWordCount(%fEnums);
+				for(%k = 0; %k < %fEcount; %k++)
+				{
+					%enumField = getField(%fEnums,%k);
+					echo(%enumField);
+					%pop.add(%enumField ,%k);
+				}
+				%value = %pop.findText(%fValue);
+				%pop.setSelected(%value);
+				echo("pop added");
+				%fContainer.add(%pop);
+				
+			}	
+			%container.add(%fContainer);
+			ParticlePlayerBehaviorStack.add(%container);
+		}
+	}
+	%extent = ParticlePlayerBehaviorStack.getExtent();
+	%height = getWord(%extent, 1);
+	%height = %height + 70;
+	ParticlePlayerBehaviorContainer.setExtent(197, %height);
+	ParticlePlayerBehaviorRollout.sizeToContents();
+}
+
+function ParticlePlayerBehaviorList::update(%this)
+{
+	%count = BehaviorSet.getCount();
+	%this.clear();
+	for(%i = 0; %i < %count; %i++)
+	{
+		%this.add(BehaviorSet.getObject(%i).getName(), %i);
+	}
+}
+
+function EditorToy::addParticlePlayerBehavior(%this)
+{
+	%obj = EditorToy.selParticlePlayer;
+	%behavior = ParticlePlayerBehaviorList.getText();
+	%count = getWordCount( %obj.BehaviorList);
+	for(%i = 0; %i < %count; %i++)
+	{
+		%word = getWord(%obj.BehaviorList, %i);
+		if(%word $= %behavior)
+		{
+			//dont want to add the same behavior twice
+			echo("%---Behavior already bound to this object---%");
+			return;
+		}
+	}
+	%obj.BehaviorList = setWord( %obj.BehaviorList, getWordCount( %obj.BehaviorList), %behavior);
+	EditorToy.createParticlePlayerBehaviorField();
+}
+
+function EditorToy::createParticlePlayerBehaviorField(%this)
+{
+	%obj = EditorToy.selParticlePlayer;
+	%count = getWordCount( %obj.BehaviorList );
+	for(%i = 0; %i < %count; %i++)
+	{
+		%behavior = getWord(%obj.BehaviorList, %i);
+		%fieldValue = %behavior;
+		%bCount = %behavior.getBehaviorFieldCount();
+		echo(%bCount);
+		for(%j = 0; %j < %bCount; %j++)
+		{
+			%field = %behavior.getBehaviorField(%j);
+			%fieldName = getWord(%field, 0);
+			%fieldDef = getWord(%field, 2);
+			if(%fieldDef $= "")
+				%fieldDef = "Null";
+			%field = %fieldName TAB %fieldDef;
+			%fieldValue = %fieldValue TAB %field;
+		}
+		%dynField = "Behavior" @ %i;
+		
+		%command = %obj @ "." @ %dynField @ " = \"" @ %fieldValue @ "\";" ;
+		
+        eval(%command);
+	}
+
+	EditorToy.updateParticlePlayerBehavior();
+}
+
+function ParticlePlayerBehaviorField::onReturn(%this)
+{
+	%obj = EditorToy.selParticlePlayer;
+	%behaviorId = %this.bId;
+	%word = %this.word;
+	%value = %this.getText();
+	%field = %obj.getFieldValue(%behaviorId);
+	%fieldUp = setField(%field, %word, %value);
+	%obj.setFieldValue(%behaviorId,%fieldUp);
+}
+
+function ParticlePlayerBehaviorFieldList::onSelect(%this)
+{
+	%obj = EditorToy.selParticlePlayer;
+	%behaviorId = %this.bId;
+	%word = %this.word;
+	%value = %this.getText();
+	%field = %obj.getFieldValue(%behaviorId);
+	%fieldUp = setField(%field, %word, %value);
+	%obj.setFieldValue(%behaviorId,%fieldUp);
+}

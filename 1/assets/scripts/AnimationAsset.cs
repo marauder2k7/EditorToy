@@ -229,13 +229,13 @@ function EditorToy::createPreviewAnim(%this)
 	
 	%imageFrame = new GuiSpriteCtrl(PreviewAnimation)
 	{
-		Image = %asset;
+		Animation = %assetId;
 		Active = "1";
 		Position = "50 50";
 		Extent = "300 300";
 		
 	};
-	%imageFrame.setAnimation(%assetId);
+	//%imageFrame.setAnimation(%assetId);
 	PreviewWindow.add(%imageFrame);
 	
 	AnimName.update();
@@ -297,6 +297,7 @@ function AnimLoop::onReturn(%this)
 	if(!isObject(FrameSim))
 		return;
 	EditorToy.updateAnimationLoop(%value);
+	//EditorToy.updatePreviewAnim();
 }
 
 function AnimRand::onReturn(%this)

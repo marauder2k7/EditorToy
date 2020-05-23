@@ -1,6 +1,5 @@
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //Sprite functions 
 function EditorToy::loadSpriteAsset(%this)
 {
@@ -4993,7 +4992,6 @@ function SpriteCollOneWay::onReturn(%this)
 	EditorToy.updateSprite();
 }
 
-
 //Sprite Name
 function SpriteName::onAdd(%this)
 {
@@ -5172,7 +5170,7 @@ function EditorToy::updateSpriteBehavior(%this)
 				%edit = new GuiTextEditCtrl() {
 					bId = %behaviorDynamic;
 					word = %fWord;
-					class = "BehaviorField";
+					class = "SpriteBehaviorField";
 					text = %fValue;
 					historySize = "0";
 					tabComplete = "0";
@@ -5208,7 +5206,7 @@ function EditorToy::updateSpriteBehavior(%this)
 				%edit = new GuiTextEditCtrl() {
 					bId = %behaviorDynamic;
 					word = %fWord;
-					class = "BehaviorField";
+					class = "SpriteBehaviorField";
 					text = %fValue;
 					historySize = "0";
 					tabComplete = "0";
@@ -5246,7 +5244,7 @@ function EditorToy::updateSpriteBehavior(%this)
 					sbUsesNAColor = "0";
 					bId = %behaviorDynamic;
 					word = %fWord;
-					class = "BehaviorFieldList";
+					class = "SpriteBehaviorFieldList";
 					reverseTextList = "0";
 					bitmapBounds = "16 16";
 					maxLength = "1024";
@@ -5355,7 +5353,7 @@ function EditorToy::createSpriteBehaviorField(%this)
 	EditorToy.updateSpriteBehavior();
 }
 
-function BehaviorField::onReturn(%this)
+function SpriteBehaviorField::onReturn(%this)
 {
 	%obj = EditorToy.selSprite;
 	%behaviorId = %this.bId;
@@ -5366,7 +5364,7 @@ function BehaviorField::onReturn(%this)
 	%obj.setFieldValue(%behaviorId,%fieldUp);
 }
 
-function BehaviorFieldList::onSelect(%this)
+function SpriteBehaviorFieldList::onSelect(%this)
 {
 	%obj = EditorToy.selSprite;
 	%behaviorId = %this.bId;
